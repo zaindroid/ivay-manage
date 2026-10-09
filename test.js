@@ -37,12 +37,12 @@ async function main() {
     assert.strictEqual(state.cards["dep-host"].owner, "");
     assert.strictEqual(state.cards["dep-host"].priority, "blocker");
 
-    let r = await fetch(base + "/api/cards/dep-host", { method: "PATCH", headers: H, body: JSON.stringify({ owner: "Zain", status: "done" }) });
+    let r = await fetch(base + "/api/cards/mk-research", { method: "PATCH", headers: H, body: JSON.stringify({ owner: "Zain", status: "done" }) });
     assert.strictEqual(r.status, 200);
     const body = await r.json();
     assert.strictEqual(body.card.owner, "Zain");
     assert.ok(body.card.doneAt);
-    assert.ok(body.unblocked.some(u => u.id === "dep-voice"), "finishing hosting unblocks the voice server");
+    assert.ok(body.unblocked.some(u => u.id === "mk-scrape"), "finishing market research unblocks the store list");
 
     r = await fetch(base + "/api/cards/dep-db", { method: "PATCH", headers: H, body: JSON.stringify({ priority: "urgent" }) });
     assert.strictEqual(r.status, 400, "unknown priority is rejected");
