@@ -12,7 +12,7 @@
 /* Layout: a launch control room. Countdown + release waveform on top, personal focus beside team pulse, then the board. */
 :root{
   --bg:#FAFAFB; --surface:#FFFFFF; --sunk:#F3F3F6; --ink:#18171D; --muted:#6F6D7A; --line:#ECEBF0; --accent:#5B4BDB; --accent-ink:#FFFFFF; --accent-soft:#EEEBFF; --saleeta:#D0558C; --zain:#C98A1E; --musharaf:#2A9C90; --team:#6F6D7A; --ok:#1F9A6B; --warn:#B07A12; --bad:#C2412F; --ok-soft:#E3F5EC; --warn-soft:#FFF4D9; --bad-soft:#FFECE8;
-  --glass:rgba(255,255,255,.72); --p1:#B9B0FF; --p2:#FFC59E; --p3:#FFA8C8; --p4:#8EDDB4; --fx:1;
+  --glass:rgba(255,255,255,.72); --p1:#B9B0FF; --p2:#FFC59E; --p3:#FFA8C8; --p4:#8EDDB4;
   --shadow:0 1px 2px rgba(20,26,23,.04);
   --f-display:"Plus Jakarta Sans","Avenir Next","Segoe UI",system-ui,sans-serif;
   --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,sans-serif;
@@ -269,10 +269,10 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
   .prow .pstat{grid-column:1/-1}
 }
 
-/* Pastel Bento pass: white first, pastel accents, big numbers, WebGL glow behind glass */
+/* Pastel Bento pass: white first, pastel accents, big numbers */
 body{background:var(--bg);font-feature-settings:"tnum" 1}
-#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:var(--fx)}
 .wrap{position:relative;z-index:1;max-width:1440px}
+#momentumFx{position:absolute;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none}
 .eyebrow{font-family:var(--f-body);font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted)}
 .top{grid-template-columns:1fr auto;align-items:center}
 .brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
@@ -343,9 +343,9 @@ body{background:var(--bg);font-feature-settings:"tnum" 1}
 .bento .tile:nth-child(2){animation-delay:.05s}.bento .tile:nth-child(3){animation-delay:.1s}.bento .tile:nth-child(4){animation-delay:.15s}
 .card{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
 /* dark skins: glass follows the surface, glow dims */
-:root[data-skin="graphite"],:root[data-skin="midnight"],:root[data-skin="forest"],:root[data-theme="dark"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:.5}
-@media (prefers-color-scheme: dark){:root[data-skin="system"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:.5}}
-:root[data-skin="contrast"]{--fx:0;--glass:#FFFFFF}
+:root[data-skin="graphite"],:root[data-skin="midnight"],:root[data-skin="forest"],:root[data-theme="dark"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent)}
+@media (prefers-color-scheme: dark){:root[data-skin="system"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent)}}
+:root[data-skin="contrast"]{--glass:#FFFFFF}
 :root[data-skin="daylight"],:root[data-skin="nordic"]{--glass:color-mix(in srgb,var(--surface) 78%,transparent)}
 @media (max-width:980px){.bento{grid-template-columns:1fr 1fr}.top{grid-template-columns:1fr}.who{justify-content:flex-start}}
 @media (max-width:560px){.bento{grid-template-columns:1fr}.tile{min-height:132px}}
@@ -359,7 +359,6 @@ body{background:var(--bg);font-feature-settings:"tnum" 1}
 <body>
 
 
-<canvas id="fx" aria-hidden="true"></canvas>
 <div class="wrap">
   <header class="top">
     <div class="brand">
@@ -382,6 +381,7 @@ body{background:var(--bg);font-feature-settings:"tnum" 1}
       <div class="sub">Sat 24 Oct</div>
     </div>
     <div class="tile meter">
+      <canvas id="momentumFx" aria-hidden="true"></canvas>
       <div class="eyebrow">Launch scope shipped</div>
       <b class="big" id="pct">0%</b>
       <div class="track"><div class="fill" id="pctFill" style="width:0%"></div></div>
@@ -548,6 +548,7 @@ function renderHeader(){
   const p = tot ? Math.round(done/tot*100) : 0;
   $("#pct").textContent = p + "%";
   $("#pctFill").style.width = p + "%";
+  window.__momentum?.setPct(p / 100);
   $("#whoRow").innerHTML = me ? `<span class="pill" aria-pressed="true"><span class="dot" style="--c:${col(me)}"></span>${esc(me)}</span>` : "";
 }
 function renderWave(){
@@ -740,6 +741,7 @@ async function setStatus(id, status){
   if (status === "done"){
     const freed = before.filter(x => !isBlocked(cards[x]));
     celebrate();
+    window.__momentum?.spark();
     if (PEOPLE.includes(who)){
       const after = statsFor(who), gained = after.xp - xpBefore;
       const up = after.lvl.n > levelOf(xpBefore).n;
@@ -863,7 +865,7 @@ document.addEventListener("drop", e => { const col = e.target.closest?.(".col");
 /* ---------- boot ---------- */
 function applySkin(v){ if (v) document.documentElement.setAttribute("data-skin", v); else document.documentElement.removeAttribute("data-skin"); }
 const savedSkin = ls.get("ivay.skin") || ""; applySkin(savedSkin); $("#skinPick").value = savedSkin;
-$("#skinPick").addEventListener("change", e => { applySkin(e.target.value); ls.set("ivay.skin", e.target.value); window.__fxKick?.(); });
+$("#skinPick").addEventListener("change", e => { applySkin(e.target.value); ls.set("ivay.skin", e.target.value); });
 render();
 setInterval(()=>{ if (loaded) { renderHeader(); renderFocus(); } }, 60000);
 function showLogin(){ $("#login").hidden = false; setTimeout(()=>$("#lPass").focus(),0); }
@@ -891,33 +893,29 @@ $("#logoutBtn").addEventListener("click", async () => { try { await api("POST","
 start();
 })();
 
-/* ---------- WebGL glow: slow pastel blobs on white, drifting toward the pointer ---------- */
+/* ---------- Momentum glow: lives inside the "Launch scope shipped" tile only.
+   Builds (brighter, faster, warmer) as the team ships more of the launch
+   scope, and sparks briefly the instant a card is marked done -- a small,
+   honest reward tied to real progress instead of decorative motion. ---------- */
 (function(){
-  const cv = document.getElementById("fx");
-  const gl = cv && (cv.getContext("webgl", {premultipliedAlpha:false, antialias:false}) || cv.getContext("experimental-webgl"));
+  const cv = document.getElementById("momentumFx");
+  const tile = cv && cv.closest(".tile");
+  const gl = cv && (cv.getContext("webgl", {alpha:true, premultipliedAlpha:true, antialias:false}) || cv.getContext("experimental-webgl"));
   if (!gl) return;
   const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
   const fs = `precision mediump float;
-uniform vec2 r;uniform float t;uniform vec2 m;uniform float d;
-vec3 c1=vec3(.725,.69,1.),c2=vec3(1.,.773,.62),c3=vec3(1.,.66,.784),c4=vec3(.557,.867,.706);
-vec3 e1=vec3(.41,.45,.92),e2=vec3(.82,.6,.33),e3=vec3(.84,.47,.62),e4=vec3(.31,.68,.63);
-float blob(vec2 uv,vec2 c,float s){float dd=length(uv-c);return exp(-dd*dd/s);}
+uniform vec2 r;uniform float t;uniform float pct;uniform float spark;uniform float drk;
 void main(){
-  vec2 uv=gl_FragCoord.xy/r;uv.x*=r.x/r.y;float a=r.x/r.y;
-  vec2 b1=vec2(a*(.15+.1*sin(t*.11)),.85+.08*cos(t*.13));
-  vec2 b2=vec2(a*(.85+.08*cos(t*.09)),.8+.1*sin(t*.12));
-  vec2 b3=vec2(a*(.7+.12*sin(t*.07)),.2+.08*cos(t*.1));
-  vec2 b4=vec2(a*(.25+.1*cos(t*.08)),.15+.1*sin(t*.09));
-  vec2 bm=vec2(m.x*a,m.y);
-  vec3 col=mix(vec3(1.),vec3(.055,.06,.06),d);float w;
-  w=blob(uv,b1,.09);col=mix(col,mix(c1,e1,d),w*mix(.55,.16,d));
-  w=blob(uv,b2,.07);col=mix(col,mix(c2,e2,d),w*mix(.5,.14,d));
-  w=blob(uv,b3,.08);col=mix(col,mix(c3,e3,d),w*mix(.45,.13,d));
-  w=blob(uv,b4,.07);col=mix(col,mix(c4,e4,d),w*mix(.45,.13,d));
-  w=blob(uv,bm,.035);col=mix(col,mix(c1,e1,d),w*mix(.35,.12,d));
-  float g=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453);
-  col+=(g-.5)*mix(.012,.009,d);
-  gl_FragColor=vec4(col,1.);
+  vec2 uv=gl_FragCoord.xy/r;
+  float speed=.1+pct*.5, density=2.5+pct*7.;
+  float wave=sin((uv.x*density - t*speed)*6.28318);
+  wave=pow(max(wave,0.),4.);
+  float edge=smoothstep(0.,.25,uv.y)*smoothstep(1.,.75,uv.y);
+  float glow=wave*edge*(.1+pct*.32+spark*.5);
+  vec3 lo=mix(vec3(.72,.69,1.),vec3(.55,.6,.96),drk);
+  vec3 hi=mix(vec3(1.,.66,.78),vec3(.89,.6,.74),drk);
+  vec3 col=mix(lo,hi,pct);
+  gl_FragColor=vec4(col*glow, clamp(glow,0.,.85));
 }`;
   function sh(type, src){ const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
   const v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, fs);
@@ -925,33 +923,40 @@ void main(){
   const pr = gl.createProgram(); gl.attachShader(pr, v); gl.attachShader(pr, f); gl.linkProgram(pr);
   if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
   gl.useProgram(pr);
+  gl.enable(gl.BLEND); gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
   const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
   const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const uR = gl.getUniformLocation(pr, "r"), uT = gl.getUniformLocation(pr, "t"), uM = gl.getUniformLocation(pr, "m"), uD = gl.getUniformLocation(pr, "d");
+  const uR = gl.getUniformLocation(pr, "r"), uT = gl.getUniformLocation(pr, "t"), uP = gl.getUniformLocation(pr, "pct"), uS = gl.getUniformLocation(pr, "spark"), uDk = gl.getUniformLocation(pr, "drk");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const darkMQ = matchMedia("(prefers-color-scheme: dark)");
   function isDark(){
     const skin = document.documentElement.getAttribute("data-skin");
     if (skin === "graphite" || skin === "midnight" || skin === "forest") return true;
     if (skin === "daylight" || skin === "nordic" || skin === "contrast") return false;
-    return darkMQ.matches; // "" (pastel default) or "system"
+    return darkMQ.matches;
   }
-  let mx = .5, my = .5, tx = .5, ty = .5, dk = isDark() ? 1 : 0;
-  addEventListener("pointermove", e => { tx = e.clientX / innerWidth; ty = 1 - e.clientY / innerHeight; }, {passive:true});
-  function size(){ const px = Math.min(devicePixelRatio || 1, 1.5) * .5; cv.width = Math.max(1, innerWidth * px | 0); cv.height = Math.max(1, innerHeight * px | 0); gl.viewport(0, 0, cv.width, cv.height); }
+  let pct = 0, pctTarget = 0, spark = 0, dk = isDark() ? 1 : 0;
+  function size(){ const px = Math.min(devicePixelRatio || 1, 1.5); const w = tile.clientWidth, h = tile.clientHeight; cv.width = Math.max(1, w * px | 0); cv.height = Math.max(1, h * px | 0); gl.viewport(0, 0, cv.width, cv.height); }
   size(); addEventListener("resize", size);
   const t0 = performance.now();
   function frame(now){
-    mx += (tx - mx) * .04; my += (ty - my) * .04;
+    pct += (pctTarget - pct) * .05;
+    spark += (0 - spark) * .04;
     dk += ((isDark() ? 1 : 0) - dk) * .08;
-    gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, (now - t0) / 1000 + 20); gl.uniform2f(uM, mx, my); gl.uniform1f(uD, dk);
+    gl.clearColor(0,0,0,0); gl.clear(gl.COLOR_BUFFER_BIT);
+    gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, (now - t0) / 1000); gl.uniform1f(uP, pct); gl.uniform1f(uS, spark); gl.uniform1f(uDk, dk);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     if (!still && !document.hidden) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
-  if (still) { const kick = () => requestAnimationFrame(frame); darkMQ.addEventListener("change", kick); window.__fxKick = kick; }
-  document.addEventListener("visibilitychange", () => { if (!document.hidden && !still) requestAnimationFrame(frame); });
+  const kick = () => requestAnimationFrame(frame);
+  if (still) { darkMQ.addEventListener("change", kick); }
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) requestAnimationFrame(frame); });
+  window.__momentum = {
+    setPct(frac){ pctTarget = Math.max(0, Math.min(1, frac)); if (still) kick(); },
+    spark(){ spark = 1; if (still) kick(); },
+  };
 })();
 /* cards: soft spotlight follows the pointer */
 document.addEventListener("pointermove", e => {
