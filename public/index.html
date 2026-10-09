@@ -343,8 +343,8 @@ body{background:var(--bg);font-feature-settings:"tnum" 1}
 .bento .tile:nth-child(2){animation-delay:.05s}.bento .tile:nth-child(3){animation-delay:.1s}.bento .tile:nth-child(4){animation-delay:.15s}
 .card{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
 /* dark skins: glass follows the surface, glow dims */
-:root[data-skin="graphite"],:root[data-skin="midnight"],:root[data-skin="forest"],:root[data-theme="dark"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:0}
-@media (prefers-color-scheme: dark){:root[data-skin="system"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:0}}
+:root[data-skin="graphite"],:root[data-skin="midnight"],:root[data-skin="forest"],:root[data-theme="dark"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:.5}
+@media (prefers-color-scheme: dark){:root[data-skin="system"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:.5}}
 :root[data-skin="contrast"]{--fx:0;--glass:#FFFFFF}
 :root[data-skin="daylight"],:root[data-skin="nordic"]{--glass:color-mix(in srgb,var(--surface) 78%,transparent)}
 @media (max-width:980px){.bento{grid-template-columns:1fr 1fr}.top{grid-template-columns:1fr}.who{justify-content:flex-start}}
@@ -863,7 +863,7 @@ document.addEventListener("drop", e => { const col = e.target.closest?.(".col");
 /* ---------- boot ---------- */
 function applySkin(v){ if (v) document.documentElement.setAttribute("data-skin", v); else document.documentElement.removeAttribute("data-skin"); }
 const savedSkin = ls.get("ivay.skin") || ""; applySkin(savedSkin); $("#skinPick").value = savedSkin;
-$("#skinPick").addEventListener("change", e => { applySkin(e.target.value); ls.set("ivay.skin", e.target.value); });
+$("#skinPick").addEventListener("change", e => { applySkin(e.target.value); ls.set("ivay.skin", e.target.value); window.__fxKick?.(); });
 render();
 setInterval(()=>{ if (loaded) { renderHeader(); renderFocus(); } }, 60000);
 function showLogin(){ $("#login").hidden = false; setTimeout(()=>$("#lPass").focus(),0); }
@@ -898,9 +898,10 @@ start();
   if (!gl) return;
   const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
   const fs = `precision mediump float;
-uniform vec2 r;uniform float t;uniform vec2 m;
+uniform vec2 r;uniform float t;uniform vec2 m;uniform float d;
 vec3 c1=vec3(.725,.69,1.),c2=vec3(1.,.773,.62),c3=vec3(1.,.66,.784),c4=vec3(.557,.867,.706);
-float blob(vec2 uv,vec2 c,float s){float d=length(uv-c);return exp(-d*d/s);}
+vec3 e1=vec3(.41,.45,.92),e2=vec3(.82,.6,.33),e3=vec3(.84,.47,.62),e4=vec3(.31,.68,.63);
+float blob(vec2 uv,vec2 c,float s){float dd=length(uv-c);return exp(-dd*dd/s);}
 void main(){
   vec2 uv=gl_FragCoord.xy/r;uv.x*=r.x/r.y;float a=r.x/r.y;
   vec2 b1=vec2(a*(.15+.1*sin(t*.11)),.85+.08*cos(t*.13));
@@ -908,14 +909,14 @@ void main(){
   vec2 b3=vec2(a*(.7+.12*sin(t*.07)),.2+.08*cos(t*.1));
   vec2 b4=vec2(a*(.25+.1*cos(t*.08)),.15+.1*sin(t*.09));
   vec2 bm=vec2(m.x*a,m.y);
-  vec3 col=vec3(1.);float w;
-  w=blob(uv,b1,.09);col=mix(col,c1,w*.55);
-  w=blob(uv,b2,.07);col=mix(col,c2,w*.5);
-  w=blob(uv,b3,.08);col=mix(col,c3,w*.45);
-  w=blob(uv,b4,.07);col=mix(col,c4,w*.45);
-  w=blob(uv,bm,.035);col=mix(col,c1,w*.35);
+  vec3 col=mix(vec3(1.),vec3(.055,.06,.06),d);float w;
+  w=blob(uv,b1,.09);col=mix(col,mix(c1,e1,d),w*mix(.55,.16,d));
+  w=blob(uv,b2,.07);col=mix(col,mix(c2,e2,d),w*mix(.5,.14,d));
+  w=blob(uv,b3,.08);col=mix(col,mix(c3,e3,d),w*mix(.45,.13,d));
+  w=blob(uv,b4,.07);col=mix(col,mix(c4,e4,d),w*mix(.45,.13,d));
+  w=blob(uv,bm,.035);col=mix(col,mix(c1,e1,d),w*mix(.35,.12,d));
   float g=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453);
-  col+=(g-.5)*.012;
+  col+=(g-.5)*mix(.012,.009,d);
   gl_FragColor=vec4(col,1.);
 }`;
   function sh(type, src){ const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
@@ -927,20 +928,29 @@ void main(){
   const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
   const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-  const uR = gl.getUniformLocation(pr, "r"), uT = gl.getUniformLocation(pr, "t"), uM = gl.getUniformLocation(pr, "m");
+  const uR = gl.getUniformLocation(pr, "r"), uT = gl.getUniformLocation(pr, "t"), uM = gl.getUniformLocation(pr, "m"), uD = gl.getUniformLocation(pr, "d");
   const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  let mx = .5, my = .5, tx = .5, ty = .5;
+  const darkMQ = matchMedia("(prefers-color-scheme: dark)");
+  function isDark(){
+    const skin = document.documentElement.getAttribute("data-skin");
+    if (skin === "graphite" || skin === "midnight" || skin === "forest") return true;
+    if (skin === "daylight" || skin === "nordic" || skin === "contrast") return false;
+    return darkMQ.matches; // "" (pastel default) or "system"
+  }
+  let mx = .5, my = .5, tx = .5, ty = .5, dk = isDark() ? 1 : 0;
   addEventListener("pointermove", e => { tx = e.clientX / innerWidth; ty = 1 - e.clientY / innerHeight; }, {passive:true});
-  function size(){ const d = Math.min(devicePixelRatio || 1, 1.5) * .5; cv.width = Math.max(1, innerWidth * d | 0); cv.height = Math.max(1, innerHeight * d | 0); gl.viewport(0, 0, cv.width, cv.height); }
+  function size(){ const px = Math.min(devicePixelRatio || 1, 1.5) * .5; cv.width = Math.max(1, innerWidth * px | 0); cv.height = Math.max(1, innerHeight * px | 0); gl.viewport(0, 0, cv.width, cv.height); }
   size(); addEventListener("resize", size);
   const t0 = performance.now();
   function frame(now){
     mx += (tx - mx) * .04; my += (ty - my) * .04;
-    gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, (now - t0) / 1000 + 20); gl.uniform2f(uM, mx, my);
+    dk += ((isDark() ? 1 : 0) - dk) * .08;
+    gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, (now - t0) / 1000 + 20); gl.uniform2f(uM, mx, my); gl.uniform1f(uD, dk);
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
     if (!still && !document.hidden) requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
+  if (still) { const kick = () => requestAnimationFrame(frame); darkMQ.addEventListener("change", kick); window.__fxKick = kick; }
   document.addEventListener("visibilitychange", () => { if (!document.hidden && !still) requestAnimationFrame(frame); });
 })();
 /* cards: soft spotlight follows the pointer */
