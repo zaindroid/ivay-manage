@@ -57,6 +57,27 @@ function loadState() {
     fs.writeFileSync(DATA_FILE, JSON.stringify(state));
     log("info", "seeded board", { cards: Object.keys(seed).length });
   }
+  applyBoardUpdates();
+}
+// One-time board updates (new cards, status moves, note additions), each applied once per board.
+function applyBoardUpdates() {
+  const file = path.join(__dirname, "board-updates.json");
+  if (!fs.existsSync(file)) return;
+  state.applied = state.applied || [];
+  let changed = false;
+  for (const u of JSON.parse(fs.readFileSync(file, "utf8"))) {
+    if (state.applied.includes(u.id)) continue;
+    for (const [id, card] of Object.entries(u.add || {})) if (!state.cards[id]) state.cards[id] = card;
+    for (const [id, p] of Object.entries(u.patch || {})) {
+      const c = state.cards[id]; if (!c) continue;
+      if (p.status && c.status !== "done") c.status = p.status;
+      if (p.note_add && !(c.note || "").includes(p.note_add.trim())) c.note = (c.note || "") + p.note_add;
+      if (p.deps_add) c.deps = [...new Set([...(c.deps || []), ...p.deps_add])];
+    }
+    state.applied.push(u.id); changed = true;
+    log("info", "applied board update", { id: u.id });
+  }
+  if (changed) fs.writeFileSync(DATA_FILE, JSON.stringify(state));
 }
 function persist() {
   const snapshot = JSON.stringify(state);

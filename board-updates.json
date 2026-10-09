@@ -1,0 +1,186 @@
+[
+ {
+  "id": "2026-10-09-build-report",
+  "add": {
+   "blk-b1": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B1 · Confirm real ElevenLabs cost per audio minute",
+    "area": "deploy",
+    "due": "2026-10-12",
+    "note": "• What is the real ElevenLabs EUR per audio minute on the chosen plan?\n• At the assumed €0.08, a 2-minute call costs about €0.16, which is over the €0.10 budget in the business plan.\n• Done when AUDIO_EUR_PER_MIN is set to the real price, or the per-call budget is raised and written down.",
+    "deps": []
+   },
+   "blk-b2": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B2 · Run 10 demo calls on staging to measure latency",
+    "area": "qa",
+    "due": "2026-10-16",
+    "note": "• Who runs 10 demo calls on staging, so we can measure p95 time from stop-speaking to first audio?\n• Then run: npm run qa:latency -- --live <shop>.\n• Needs a person, a storefront and a microphone. This is one of the biggest risks to the Oct 24 date.",
+    "deps": []
+   },
+   "blk-b3": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B3 · Run the 20-call voice test matrix",
+    "area": "qa",
+    "due": "2026-10-16",
+    "note": "• Who runs the 20-call voice matrix with a real mic: German and English, desktop and mobile, barge-in and background noise?\n• Log each result in docs/qa/results-2026-10-23.md.\n• Needs a human. This is one of the biggest risks to the Oct 24 date.",
+    "deps": []
+   },
+   "blk-b4": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B4 · Throwaway Neon branch to test migrations",
+    "area": "deploy",
+    "due": "2026-10-12",
+    "note": "• Approve a throwaway Neon database branch so prisma migrate deploy can be run against a fresh database.\n• The migrations have never been applied end to end because no local Postgres or Docker was available.\n• Done when migrate deploy reaches the final schema on the branch, and the branch is deleted afterwards.",
+    "deps": []
+   },
+   "blk-b5": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B5 · Hosting decisions for staging and prod",
+    "area": "deploy",
+    "due": "2026-10-11",
+    "note": "• Answer the 4 questions in docs/deploy/ENVIRONMENTS.md §5: staging vs prod setup, monthly cost ceiling, who may push to production, and Neon branching.\n• Zorc is ready to act as staging, following the runbook, once this is answered.\n• This blocks deployment of the Shopify app.",
+    "deps": []
+   },
+   "blk-b6": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B6 · Support email and docs URL for the App Store listing",
+    "area": "marketing",
+    "due": "2026-10-18",
+    "note": "• Decide the support email address and the public docs URL for the Shopify App Store listing.\n• Both are required fields in the app review checklist (docs/app-review-checklist.md).\n• Done when both are live and added to the listing.",
+    "deps": []
+   },
+   "blk-b7": {
+    "group": "Release blockers",
+    "owner": "",
+    "prio": "launch",
+    "priority": "blocker",
+    "size": "S",
+    "status": "todo",
+    "kudos": [],
+    "doneAt": null,
+    "updatedAt": "2026-10-09T22:25:00Z",
+    "updatedBy": "Claude",
+    "start": "2026-10-10",
+    "title": "B7 · Run Shopify billing in test mode, then live",
+    "area": "apps",
+    "due": "2026-10-21",
+    "note": "• A person runs Shopify billing in test mode, then live: €99, €249 and €499 plans with a 14-day trial.\n• Check that the trial, upgrade, downgrade and cancellation paths all work.\n• This must be done by a human with store access, and it gates the launch.",
+    "deps": []
+   }
+  },
+  "patch": {
+   "rel-go": {
+    "status": "review",
+    "note_add": "\n\nUpdate 9 Oct (build report): GO-NO-GO doc and runbook written in commit 0145814 (docs/release/GO-NO-GO-2026-10-23.md). The decision fields are left blank for the team to fill in on Oct 23. The report says Oct 24 is not safe until B1 to B5 are cleared."
+   },
+   "rel-launch": {
+    "note_add": "\n\nUpdate 9 Oct (build report): Runbook is ready (0145814). Launch waits on the go/no-go decision and blockers B1 to B7."
+   },
+   "be-conf-ai": {
+    "note_add": "\n\nUpdate 9 Oct (build report): Stretch, not attempted in this build pass, as planned."
+   },
+   "be-prof-ai": {
+    "note_add": "\n\nUpdate 9 Oct (build report): Stretch, not attempted in this build pass, as planned."
+   },
+   "be-reco": {
+    "note_add": "\n\nUpdate 9 Oct (build report): Stretch, not attempted in this build pass, as planned."
+   },
+   "qa-tokens": {
+    "deps_add": [
+     "blk-b1"
+    ]
+   },
+   "qa-latency": {
+    "deps_add": [
+     "blk-b2"
+    ]
+   },
+   "qa-voice": {
+    "deps_add": [
+     "blk-b3"
+    ]
+   },
+   "dep-db": {
+    "deps_add": [
+     "blk-b4"
+    ]
+   },
+   "dep-host": {
+    "deps_add": [
+     "blk-b5"
+    ]
+   },
+   "mk-shopify": {
+    "deps_add": [
+     "blk-b6"
+    ]
+   },
+   "app-shopify": {
+    "deps_add": [
+     "blk-b7"
+    ]
+   }
+  }
+ }
+]
