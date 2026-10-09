@@ -51,7 +51,7 @@ async function main() {
     assert.strictEqual(r.status, 201);
 
     const saved = JSON.parse(fs.readFileSync(path.join(DATA_DIR, "board.json"), "utf8"));
-    assert.strictEqual(saved.cards["dep-host"].status, "done", "changes persist to disk");
+    assert.strictEqual(saved.cards["mk-research"].status, "done", "changes persist to disk");
     assert.ok(saved.activity.length >= 3);
     console.log("all checks passed");
   } finally {
