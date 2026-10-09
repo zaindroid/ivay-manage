@@ -7,17 +7,18 @@
 <title>Ivay Launch Board</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap">
 <style>
 /* Layout: a launch control room. Countdown + release waveform on top, personal focus beside team pulse, then the board. */
 :root{
-  --bg:#F7F8F7; --surface:#FFFFFF; --sunk:#F2F4F3; --ink:#1A1F1C; --muted:#6E7671; --line:#E6E9E7; --accent:#4757D9; --accent-ink:#FFFFFF; --accent-soft:#ECEEFC; --saleeta:#B8487A; --zain:#A86F1E; --musharaf:#2A8A80; --team:#5E6762; --ok:#2E8B57; --warn:#A8741E; --bad:#C24A40; --ok-soft:#E7F3EC; --warn-soft:#F7EEDC; --bad-soft:#F8E6E4;
+  --bg:#FAFAFB; --surface:#FFFFFF; --sunk:#F3F3F6; --ink:#18171D; --muted:#6F6D7A; --line:#ECEBF0; --accent:#5B4BDB; --accent-ink:#FFFFFF; --accent-soft:#EEEBFF; --saleeta:#D0558C; --zain:#C98A1E; --musharaf:#2A9C90; --team:#6F6D7A; --ok:#1F9A6B; --warn:#B07A12; --bad:#C2412F; --ok-soft:#E3F5EC; --warn-soft:#FFF4D9; --bad-soft:#FFECE8;
+  --glass:rgba(255,255,255,.72); --p1:#B9B0FF; --p2:#FFC59E; --p3:#FFA8C8; --p4:#8EDDB4; --fx:1;
   --shadow:0 1px 2px rgba(20,26,23,.04);
-  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
-  --f-body:"Onest","Segoe UI",system-ui,-apple-system,sans-serif;
-  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --f-display:"Plus Jakarta Sans","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Plus Jakarta Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"Plus Jakarta Sans","Segoe UI",system-ui,sans-serif;
 }
-@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+@media (prefers-color-scheme: dark){:root[data-skin="system"]{
   --bg:#141716; --surface:#1A1E1C; --sunk:#171B19; --ink:#E4E8E5; --muted:#8E9892; --line:#262C29; --accent:#8C98F5; --accent-ink:#141716; --accent-soft:#262B4A; --saleeta:#E487B0; --zain:#E2AE63; --musharaf:#6CC6BC; --team:#9AA49F; --ok:#6CC795; --warn:#E2B663; --bad:#EE8077; --ok-soft:#1D2C24; --warn-soft:#2E2717; --bad-soft:#33201E;
   --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
@@ -267,37 +268,132 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
   .prow{grid-template-columns:84px 1fr}
   .prow .pstat{grid-column:1/-1}
 }
+
+/* Pastel Bento pass: white first, pastel accents, big numbers, WebGL glow behind glass */
+body{background:var(--bg);font-feature-settings:"tnum" 1}
+#fx{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none;opacity:var(--fx)}
+.wrap{position:relative;z-index:1;max-width:1440px}
+.eyebrow{font-family:var(--f-body);font-size:12.5px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--muted)}
+.top{grid-template-columns:1fr auto;align-items:center}
+.brand{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.brand h1{font-size:clamp(22px,2.6vw,28px);font-weight:800;margin:0;letter-spacing:-.02em}
+.logo{width:44px;height:44px;border-radius:15px;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:20px;flex:none;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.brand:hover .logo{transform:rotate(-8deg) scale(1.05)}
+.tagpill{font-size:13px;font-weight:600;color:var(--muted);background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:6px 12px;backdrop-filter:blur(12px)}
+.who{display:flex;gap:8px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.who>.eyebrow{display:none}
+.pill{background:var(--glass);backdrop-filter:blur(12px);font-weight:600}
+.bento{display:grid;grid-template-columns:1fr 1.15fr 1.15fr 1.15fr;gap:14px}
+.tile{position:relative;overflow:hidden;background:var(--glass);border:1px solid var(--line);border-radius:28px;padding:20px 22px;min-height:164px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);transition:transform .35s cubic-bezier(.2,.8,.2,1),box-shadow .35s}
+.tile:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px color-mix(in srgb,var(--accent) 55%,transparent)}
+.tile-accent{background:color-mix(in srgb,var(--accent-soft) 82%,transparent);border-color:transparent}
+.tile-accent .eyebrow,.tile-accent .lvl,.tile-accent .empty-note{color:var(--accent)}
+.big{font-family:var(--f-display);font-weight:800;font-size:clamp(44px,5vw,72px);line-height:.9;letter-spacing:-.045em;color:var(--ink)}
+.big small{font-size:18px;font-weight:700;letter-spacing:0;color:var(--muted);margin-left:6px}
+.tile .meter,.tile.meter{min-width:0}
+.meter b{font-size:clamp(40px,4vw,56px)}
+.meter .track{height:14px;border:0;background:var(--sunk)}
+.meter .fill{background:linear-gradient(90deg,var(--p1),var(--accent));box-shadow:0 0 18px color-mix(in srgb,var(--accent) 50%,transparent)}
+.sub{font-size:13px;color:var(--muted)}
+.xpchip{display:flex;flex-direction:column;gap:8px;justify-items:start;align-items:stretch}
+.xpchip .lvl{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-size:13px;font-weight:700}
+.xpchip .big{font-size:clamp(40px,4vw,56px)}
+.xpchip .xpbar{width:100%;background:#FFFFFF;border:0}
+#myXp:empty::before{content:"Pick who you are at the top to start earning XP.";font-size:14px;font-weight:600;color:var(--accent)}
+.goal{display:flex;flex-direction:column;justify-content:space-between;gap:10px;height:100%;border:0;padding:0;border-radius:0}
+.goal .big{font-size:clamp(40px,4vw,56px)}
+.goal .xpbar{width:100%;border:0}
+.xpbar{border:0;background:var(--sunk)}
+.xpbar span{background:linear-gradient(90deg,var(--p3),var(--accent))}
+.panel{background:var(--glass);border:1px solid var(--line);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4)}
+.panel h2{font-size:20px;font-weight:800;letter-spacing:-.02em}
+.toolbar{background:transparent;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-radius:999px}
+.tabs{background:var(--glass);backdrop-filter:blur(12px)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg)}
+.btn-primary{background:var(--ink);color:var(--bg);font-weight:800}
+.act.main{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.col{background:color-mix(in srgb,var(--sunk) 78%,transparent);border-radius:28px;padding:12px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.col-head h3{font-family:var(--f-display);font-weight:800;font-size:15px;display:flex;align-items:center;gap:8px}
+.col-head h3::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--p1)}
+.col[data-col="doing"] .col-head h3::before{background:var(--p2)}
+.col[data-col="review"] .col-head h3::before{background:var(--p3)}
+.col[data-col="done"] .col-head h3::before{background:var(--p4)}
+.col-head .mono,.col[data-col] .col-head .mono{background:var(--surface);color:var(--ink);font-weight:800}
+.card{border:0;border-radius:22px;padding:16px;box-shadow:0 1px 2px color-mix(in srgb,var(--ink) 6%,transparent);overflow:hidden;isolation:isolate}
+.card::after{content:"";position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .25s;background:radial-gradient(260px circle at var(--mx,50%) var(--my,50%),color-mix(in srgb,var(--p1) 30%,transparent),transparent 65%)}
+.card:hover::after{opacity:1}
+.card:hover{transform:translateY(-3px);box-shadow:0 16px 32px -18px color-mix(in srgb,var(--accent) 45%,transparent)}
+.card.blocked{border:1.5px dashed var(--line);background:color-mix(in srgb,var(--surface) 55%,transparent)}
+.ctitle{font-weight:700;font-size:14.5px;line-height:1.35}
+.cgroup{font-family:var(--f-body);text-transform:none;letter-spacing:0;font-size:12px;font-weight:600;background:var(--sunk);padding:3px 10px;border-radius:999px}
+.xptag{background:var(--accent-soft);color:var(--accent);font-weight:800}
+.pri{font-weight:700}
+.pri.high{background:var(--warn-soft);color:var(--warn)}
+.pri.blocker{background:var(--bad-soft)}
+.av{color:var(--ink);font-weight:800}
+.lvl{font-family:var(--f-body)}
+.lbrow{background:var(--surface);border-color:transparent}
+.rank{font-weight:800}
+.lbrow:first-child .rank{background:var(--ink);color:var(--bg)}
+.badge{font-weight:700}
+.tl-scroll,.feed{background:var(--glass);backdrop-filter:blur(18px)}
+.drawer{background:var(--surface)}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.tile,.panel{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.bento .tile:nth-child(2){animation-delay:.05s}.bento .tile:nth-child(3){animation-delay:.1s}.bento .tile:nth-child(4){animation-delay:.15s}
+.card{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+/* dark skins: glass follows the surface, glow dims */
+:root[data-skin="graphite"],:root[data-skin="midnight"],:root[data-skin="forest"],:root[data-theme="dark"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:0}
+@media (prefers-color-scheme: dark){:root[data-skin="system"]{--glass:color-mix(in srgb,var(--surface) 80%,transparent);--fx:0}}
+:root[data-skin="contrast"]{--fx:0;--glass:#FFFFFF}
+:root[data-skin="daylight"],:root[data-skin="nordic"]{--glass:color-mix(in srgb,var(--surface) 78%,transparent)}
+@media (max-width:980px){.bento{grid-template-columns:1fr 1fr}.top{grid-template-columns:1fr}.who{justify-content:flex-start}}
+@media (max-width:560px){.bento{grid-template-columns:1fr}.tile{min-height:132px}}
+.goal{align-items:flex-start;text-align:left;justify-items:start}
+.ftag{text-transform:capitalize}.lvl{text-transform:none}
+.ftag,.lvl{letter-spacing:0;font-family:var(--f-body);font-weight:700}
+@media (max-width:560px){.bento{grid-template-columns:1fr 1fr;gap:10px}.tile{min-height:120px;padding:16px;border-radius:24px}.big{font-size:40px}.big small{font-size:14px}.meter b,.xpchip .big,.goal .big{font-size:36px}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
 </head>
 <body>
 
 
+<canvas id="fx" aria-hidden="true"></canvas>
 <div class="wrap">
   <header class="top">
     <div class="brand">
-      <div class="eyebrow">Ivay · first market release</div>
-      <h1>Launch <span>board</span></h1>
-    </div>
-    <div class="count">
-      <div>
-        <div class="eyebrow" id="launchLabel">Launch Sat 24 Oct</div>
-        <div class="tminus mono" id="tminus">T–15<small>days</small></div>
-      </div>
-      <div class="meter">
-        <div class="eyebrow">Launch scope shipped</div>
-        <b class="mono" id="pct">0%</b>
-        <div class="track"><div class="fill" id="pctFill" style="width:0%"></div></div>
-      </div>
+      <span class="logo">i</span>
+      <h1>Ivay launch</h1>
+      <span class="tagpill">First market release</span>
     </div>
     <div class="who">
       <div class="eyebrow">Signed in</div>
       <div class="who-row" id="whoRow"></div>
       <div class="signed"><button class="linkbtn" id="logoutBtn">Sign out</button></div>
-      <div class="xpchip" id="myXp"></div>
-      <div class="toptools"><select class="skin" id="skinPick" aria-label="Theme"><option value="">Theme: system</option><option value="daylight">Daylight</option><option value="graphite">Graphite</option><option value="midnight">Midnight</option><option value="nordic">Nordic</option><option value="forest">Forest</option><option value="contrast">High contrast</option></select></div>
+      <div class="toptools"><select class="skin" id="skinPick" aria-label="Theme"><option value="">Theme: Pastel</option><option value="system">Match my device</option><option value="daylight">Daylight</option><option value="graphite">Graphite</option><option value="midnight">Midnight</option><option value="nordic">Nordic</option><option value="forest">Forest</option><option value="contrast">High contrast</option></select></div>
     </div>
   </header>
+
+  <section class="bento" aria-label="Launch at a glance">
+    <div class="tile">
+      <div class="eyebrow" id="launchLabel">Launch in</div>
+      <div class="big" id="tminus">15<small>days</small></div>
+      <div class="sub">Sat 24 Oct</div>
+    </div>
+    <div class="tile meter">
+      <div class="eyebrow">Launch scope shipped</div>
+      <b class="big" id="pct">0%</b>
+      <div class="track"><div class="fill" id="pctFill" style="width:0%"></div></div>
+    </div>
+    <div class="tile tile-accent">
+      <div class="eyebrow">Your XP</div>
+      <div class="xpchip" id="myXp"></div>
+    </div>
+    <div class="tile">
+      <div class="goal" id="goal"></div>
+    </div>
+  </section>
 
   <div id="banner" class="banner" hidden></div>
 
@@ -317,7 +413,6 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
         <span class="eyebrow mono" id="todayLabel"></span>
       </div>
       <div class="focus-list" id="focus"><div class="empty-note">Loading cards…</div></div>
-      <div class="goal" id="goal"></div>
       <div class="nudges" id="nudges"></div>
     </div>
     <div class="panel">
@@ -445,7 +540,7 @@ function justUnblocked(c){
 /* ---------- header ---------- */
 function renderHeader(){
   const left = LAUNCH_DAY - TODAY();
-  $("#tminus").innerHTML = left > 0 ? `T–${left}<small>${left===1?"day":"days"}</small>` : left === 0 ? `Launch<small>day</small>` : `Live<small>+${-left}d</small>`;
+  $("#tminus").innerHTML = left > 0 ? `${left}<small>${left===1?"day":"days"}</small>` : left === 0 ? `Launch<small>day</small>` : `Live<small>+${-left}d</small>`;
   $("#todayLabel").textContent = "Day " + Math.max(1,Math.min(16,TODAY())) + " of 16 · " + new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"short"});
   const scope = list().filter(c => c.prio === "launch");
   const tot = scope.reduce((a,c)=>a+(SIZE_PTS[c.size]||2),0);
@@ -525,10 +620,10 @@ function renderPulse(){
 function renderGame(){
   const t = todayISO();
   const n = list().filter(c=>c.status==="done" && c.doneAt && iso(new Date(c.doneAt))===t).length;
-  $("#goal").innerHTML = `<span class="eyebrow">Team goal today</span><span class="xpbar"><span style="width:${Math.min(100,n/DAILY_GOAL*100)}%"></span></span><span class="mono" style="font-weight:600">${n>=DAILY_GOAL?"Goal hit · ":""}${n}/${DAILY_GOAL} shipped</span>`;
+  $("#goal").innerHTML = `<span class="eyebrow">Team goal today</span><b class="big">${n}<small>/ ${DAILY_GOAL} shipped</small></b><span class="xpbar"><span style="width:${Math.min(100,n/DAILY_GOAL*100)}%"></span></span>`;
   if (!me){ $("#myXp").innerHTML = ""; return; }
   const st = statsFor(me);
-  $("#myXp").innerHTML = `<span><span class="lvl">Lv ${st.lvl.n} · ${st.lvl.name}</span> <b class="mono">${st.xp} XP</b></span><span class="xpbar"><span style="width:${st.lvl.pct.toFixed(1)}%"></span></span><span class="empty-note">${st.lvl.next?`${st.lvl.next-st.xp} XP to ${st.lvl.nextName}`:"Top level reached"}</span>`;
+  $("#myXp").innerHTML = `<span class="lvl">${esc(me)} · Lv ${st.lvl.n} ${st.lvl.name}</span><b class="big">${st.xp}<small>XP</small></b><span class="xpbar"><span style="width:${st.lvl.pct.toFixed(1)}%"></span></span><span class="empty-note">${st.lvl.next?`${st.lvl.next-st.xp} XP to ${st.lvl.nextName}`:"Top level reached"}</span>`;
 }
 
 /* ---------- filters / views ---------- */
@@ -548,7 +643,7 @@ function cardHTML(c){
       ${c.prio==="stretch" ? `<span class="due">stretch</span>` : ""}
       <span class="due ${di.cls}" style="margin-left:auto">${di.txt}</span>
       <span class="xptag">${c.status==="done"?xpEarned(c):xpValue(c)} XP</span>
-      ${(c.kudos||[]).length ? `<span class="chip">👏 ${c.kudos.length}</span>` : ""}
+      ${(c.kudos||[]).length ? `<span class="chip">${c.kudos.length} kudos</span>` : ""}
     </div>
   </div>`;
 }
@@ -673,7 +768,7 @@ function renderDrawer(id){
     <div class="dhead"><div style="display:grid;gap:6px"><span class="eyebrow">${esc(AREAS[c.area]||c.area)} · ${esc(c.group)}</span><h2>${esc(c.title)}</h2></div><button class="x" aria-label="Close">✕</button></div>
     <div class="cfoot"><span class="ftag ${PRI_LABEL[c.priority||"high"][1]}">${PRI_LABEL[c.priority||"high"][0]} priority</span><span class="ftag ${di.cls}">${di.txt}</span>${c.owner?"":`<span class="chip">unclaimed</span>`}${c.prio==="stretch"?`<span class="chip">stretch goal</span>`:c.prio==="later"?`<span class="chip">after launch</span>`:`<span class="chip">launch scope</span>`}<span class="chip">effort ${esc(c.size)}</span>${isBlocked(c)?`<span class="chip">waiting on ${waitingOn(c).length}</span>`:""}</div>
     ${readOnly ? `<div class="empty-note">You're viewing this board read-only.</div>` : `<div class="actions">${!c.owner&&c.status==="todo"?`<button class="act" id="claimBtn">Take it</button>`:""}${next.map(([s,l,k])=>`<button class="act ${k}" data-status="${s}">${l}</button>`).join("")}${c.owner&&c.owner===me&&c.status==="todo"?`<button class="act" id="releaseBtn">Give it back</button>`:""}</div>`}
-    ${c.status==="done" ? `<div class="kudos"><button class="act" id="kudoBtn" ${!me?"disabled title='Pick who you are at the top first'":""}>${iKudo?"Kudos sent":"Send kudos"} 👏</button><span class="empty-note">${(c.kudos||[]).length?esc(c.kudos.join(", "))+" cheered this":"Be the first to cheer this."}</span></div>`:""}
+    ${c.status==="done" ? `<div class="kudos"><button class="act" id="kudoBtn" ${!me?"disabled title='Pick who you are at the top first'":""}>${iKudo?"Kudos sent":"Send kudos"}</button><span class="empty-note">${(c.kudos||[]).length?esc(c.kudos.join(", "))+" cheered this":"Be the first to cheer this."}</span></div>`:""}
     <div class="grid2">
       <label class="f">Owner<select id="fOwner"><option value="" ${!c.owner?"selected":""}>Unclaimed</option>${OWNERS.map(o=>`<option ${o===c.owner?"selected":""}>${o}</option>`).join("")}</select></label>
       <label class="f">Priority<select id="fPriority">${["blocker","high","low"].map(v=>`<option value="${v}" ${v===(c.priority||"high")?"selected":""}>${PRI_LABEL[v][0]}</option>`).join("")}</select></label>
@@ -795,6 +890,64 @@ $("#loginForm").addEventListener("submit", async e => {
 $("#logoutBtn").addEventListener("click", async () => { try { await api("POST","/api/logout"); } catch(_){} if (es) es.close(); me = ""; cards = {}; loaded = false; render(); showLogin(); });
 start();
 })();
+
+/* ---------- WebGL glow: slow pastel blobs on white, drifting toward the pointer ---------- */
+(function(){
+  const cv = document.getElementById("fx");
+  const gl = cv && (cv.getContext("webgl", {premultipliedAlpha:false, antialias:false}) || cv.getContext("experimental-webgl"));
+  if (!gl) return;
+  const vs = "attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}";
+  const fs = `precision mediump float;
+uniform vec2 r;uniform float t;uniform vec2 m;
+vec3 c1=vec3(.725,.69,1.),c2=vec3(1.,.773,.62),c3=vec3(1.,.66,.784),c4=vec3(.557,.867,.706);
+float blob(vec2 uv,vec2 c,float s){float d=length(uv-c);return exp(-d*d/s);}
+void main(){
+  vec2 uv=gl_FragCoord.xy/r;uv.x*=r.x/r.y;float a=r.x/r.y;
+  vec2 b1=vec2(a*(.15+.1*sin(t*.11)),.85+.08*cos(t*.13));
+  vec2 b2=vec2(a*(.85+.08*cos(t*.09)),.8+.1*sin(t*.12));
+  vec2 b3=vec2(a*(.7+.12*sin(t*.07)),.2+.08*cos(t*.1));
+  vec2 b4=vec2(a*(.25+.1*cos(t*.08)),.15+.1*sin(t*.09));
+  vec2 bm=vec2(m.x*a,m.y);
+  vec3 col=vec3(1.);float w;
+  w=blob(uv,b1,.09);col=mix(col,c1,w*.55);
+  w=blob(uv,b2,.07);col=mix(col,c2,w*.5);
+  w=blob(uv,b3,.08);col=mix(col,c3,w*.45);
+  w=blob(uv,b4,.07);col=mix(col,c4,w*.45);
+  w=blob(uv,bm,.035);col=mix(col,c1,w*.35);
+  float g=fract(sin(dot(gl_FragCoord.xy,vec2(12.9898,78.233)))*43758.5453);
+  col+=(g-.5)*.012;
+  gl_FragColor=vec4(col,1.);
+}`;
+  function sh(type, src){ const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s); return gl.getShaderParameter(s, gl.COMPILE_STATUS) ? s : null; }
+  const v = sh(gl.VERTEX_SHADER, vs), f = sh(gl.FRAGMENT_SHADER, fs);
+  if (!v || !f) return;
+  const pr = gl.createProgram(); gl.attachShader(pr, v); gl.attachShader(pr, f); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return;
+  gl.useProgram(pr);
+  const buf = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, "p"); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const uR = gl.getUniformLocation(pr, "r"), uT = gl.getUniformLocation(pr, "t"), uM = gl.getUniformLocation(pr, "m");
+  const still = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let mx = .5, my = .5, tx = .5, ty = .5;
+  addEventListener("pointermove", e => { tx = e.clientX / innerWidth; ty = 1 - e.clientY / innerHeight; }, {passive:true});
+  function size(){ const d = Math.min(devicePixelRatio || 1, 1.5) * .5; cv.width = Math.max(1, innerWidth * d | 0); cv.height = Math.max(1, innerHeight * d | 0); gl.viewport(0, 0, cv.width, cv.height); }
+  size(); addEventListener("resize", size);
+  const t0 = performance.now();
+  function frame(now){
+    mx += (tx - mx) * .04; my += (ty - my) * .04;
+    gl.uniform2f(uR, cv.width, cv.height); gl.uniform1f(uT, (now - t0) / 1000 + 20); gl.uniform2f(uM, mx, my);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+    if (!still && !document.hidden) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && !still) requestAnimationFrame(frame); });
+})();
+/* cards: soft spotlight follows the pointer */
+document.addEventListener("pointermove", e => {
+  const c = e.target.closest && e.target.closest(".card"); if (!c) return;
+  const b = c.getBoundingClientRect(); c.style.setProperty("--mx", (e.clientX - b.left) + "px"); c.style.setProperty("--my", (e.clientY - b.top) + "px");
+}, {passive:true});
 </script>
 
 </body>
