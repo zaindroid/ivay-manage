@@ -41,6 +41,16 @@ function loadState() {
   if (fs.existsSync(DATA_FILE)) {
     state = JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
     log("info", "loaded board", { cards: Object.keys(state.cards).length });
+    // Add task briefs from the seed to existing boards, keeping any notes people wrote.
+    const seed = JSON.parse(fs.readFileSync(path.join(__dirname, "seed-cards.json"), "utf8"));
+    let briefed = 0;
+    for (const [id, c] of Object.entries(state.cards)) {
+      const brief = seed[id] && seed[id].note;
+      if (!brief || !brief.startsWith("• ") || (c.note || "").startsWith("• ")) continue;
+      c.note = c.note && !brief.includes(c.note.trim()) ? brief.split("\n\nNote: ")[0] + "\n\nNote: " + c.note.trim() : brief;
+      briefed++;
+    }
+    if (briefed) { fs.writeFileSync(DATA_FILE, JSON.stringify(state)); log("info", "added task briefs", { cards: briefed }); }
   } else {
     const seed = JSON.parse(fs.readFileSync(path.join(__dirname, "seed-cards.json"), "utf8"));
     state = { cards: seed, activity: [] };
