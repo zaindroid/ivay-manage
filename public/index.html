@@ -217,6 +217,41 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
 .av.empty{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
 .toptools{display:flex;gap:8px;align-items:center;justify-content:flex-end}
 .toolbar{background:var(--bg)}
+/* Rounded, playful pass */
+.panel{border-radius:28px;padding:22px}
+.wave{border-radius:28px}
+.card{border-radius:20px;padding:14px 16px}
+.card:hover{transform:translateY(-2px);border-color:var(--line);box-shadow:0 10px 24px -14px color-mix(in srgb,var(--ink) 35%,transparent)}
+.card.blocked{border-radius:20px}
+.pill,.tab,.act,.btn-primary,.skin,.chip,.badge,.ftag,.nudge,.x{border-radius:999px}
+.tabs{border-radius:999px;padding:4px}
+.tab{padding:8px 16px}
+.act,.btn-primary{padding:10px 18px;transition:transform .12s}
+.act:hover,.btn-primary:hover,.pill:hover{transform:translateY(-1px)}
+.fitem{border-radius:20px;padding:12px 14px}
+.fitem:hover{transform:translateY(-1px)}
+.lbrow{border-radius:22px;padding:12px 14px}
+.goal{border-radius:999px;padding:10px 16px}
+.xpbar{height:8px}
+.f input,.f select,.f textarea{border-radius:14px;padding:10px 12px}
+.drawer{border-radius:28px 0 0 28px}
+.dep{border-radius:14px}
+.toast{border-radius:20px;padding:12px 18px}
+.av{width:26px;height:26px;font-size:12px}
+.col-head{padding:4px 6px 6px}
+.col-head .mono{background:var(--sunk);padding:2px 10px;border-radius:999px;font-size:11.5px}
+.col-head h3{font-size:15px}
+.col[data-col="doing"] .col-head .mono{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+.col[data-col="review"] .col-head .mono{background:color-mix(in srgb,var(--accent) 16%,transparent);color:var(--accent)}
+.col[data-col="done"] .col-head .mono{background:color-mix(in srgb,var(--ok) 16%,transparent);color:var(--ok)}
+.col-empty{border-radius:20px}
+.xptag{background:color-mix(in srgb,var(--ok) 15%,transparent);color:var(--ok);padding:2px 9px;border-radius:999px;font-weight:600}
+.pri{padding:3px 9px 3px 8px;border-radius:999px;background:var(--sunk)}
+.pri.blocker{background:color-mix(in srgb,var(--bad) 12%,transparent)}
+.rank{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:15px;background:var(--sunk)}
+.lbrow:first-child .rank{background:var(--accent);color:var(--accent-ink)}
+.banner{border-radius:20px}
+.meter .track{height:12px}
 @media (max-width:980px){
   .top{grid-template-columns:1fr;align-items:start}
   .count{justify-content:flex-start}
@@ -329,7 +364,7 @@ const START = new Date(2026,9,9), LAUNCH_DAY = 16;
 const PEOPLE = ["Saleeta","Zain","Musharaf"];
 const OWNERS = [...PEOPLE,"Team"];
 const ROLE = {Saleeta:"Frontend",Zain:"Backend · deploy · marketing",Musharaf:"Backend · deploy",Team:"Everyone"};
-const COLS = [["todo","Ready to pick"],["doing","In progress"],["review","In review"],["done","Done"]];
+const COLS = [["todo","Up for grabs"],["doing","Cooking"],["review","Vibe check"],["done","Shipped"]];
 const AREAS = {deploy:"Deployment",backend:"Backend",frontend:"Frontend",apps:"Apps",qa:"Q&A",marketing:"Marketing"};
 const SIZE_PTS = {S:1,M:2,L:3};
 const WIP = 2;
