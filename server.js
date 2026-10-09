@@ -70,7 +70,7 @@ function applyBoardUpdates() {
     for (const [id, card] of Object.entries(u.add || {})) if (!state.cards[id]) state.cards[id] = card;
     for (const [id, p] of Object.entries(u.patch || {})) {
       const c = state.cards[id]; if (!c) continue;
-      if (p.status && c.status !== "done") c.status = p.status;
+      if (p.status && c.status !== "done") { c.status = p.status; if (p.status === "done") c.doneAt = new Date().toISOString(); }
       if (p.note_add && !(c.note || "").includes(p.note_add.trim())) c.note = (c.note || "") + p.note_add;
       if (p.deps_add) c.deps = [...new Set([...(c.deps || []), ...p.deps_add])];
     }

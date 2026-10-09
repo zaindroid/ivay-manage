@@ -182,5 +182,143 @@
     ]
    }
   }
+ },
+ {
+  "id": "2026-10-09-build-report-full",
+  "patch": {
+   "dep-host": {
+    "note_add": "\n\nBuild 9 Oct (review): commit fcf3eef on branch release/2026-10-24 (not pushed yet). docs/deploy/ENVIRONMENTS.md written and matches README, toml and .env.example. The report marks it done, but it stays in review until the hosting decisions in B5 are answered.",
+    "status": "review"
+   },
+   "dep-db": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 2d67b9f on branch release/2026-10-24 (not pushed yet). 6 models in both schemas, 5 migrations, validate and generate pass. Not yet applied to a fresh database (B4).",
+    "status": "review"
+   },
+   "be-onb": {
+    "note_add": "\n\nBuild 9 Oct (review): commit d897e72 on branch release/2026-10-24 (not pushed yet). app.onboarding.tsx and catalogue indexing built. Needs a fresh dev store to accept.",
+    "status": "review"
+   },
+   "dep-api": {
+    "note_add": "\n\nBuild 9 Oct (review): commit d897e72 on branch release/2026-10-24 (not pushed yet). /api/session/* and /api/handoff with CORS and rate limits, 10 unit tests. Needs a storefront to check the log lines.",
+    "status": "review"
+   },
+   "be-buyer": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 09981f1 on branch release/2026-10-24 (not pushed yet). check:prompts 64/64 plus 10 scripted conversations (check-prompts.md).",
+    "status": "done"
+   },
+   "be-tone": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 09981f1 on branch release/2026-10-24 (not pushed yet). All tags × moods × languages asserted.",
+    "status": "done"
+   },
+   "be-reverse": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 09981f1 on branch release/2026-10-24 (not pushed yet). Reverse-seller lines only for the hesitant and comparing tags. Guard checks pass.",
+    "status": "done"
+   },
+   "dep-voice": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). orb.js extracted with 6 timing marks. The session loop needs a live store.",
+    "status": "review"
+   },
+   "be-tools": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 68b6a16, 4a7ef7d on branch release/2026-10-24 (not pushed yet). get_shop_policies, add_to_cart and handoff tools plus a dry-run sync:tools. The one-call acceptance test needs a store.",
+    "status": "review"
+   },
+   "fe-mode": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). Mode bubble and per-session dismissal built. Needs desktop and mobile checks.",
+    "status": "review"
+   },
+   "fe-avatar": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). mapVoiceStatusToExpression unit-tested; states wired to voice events.",
+    "status": "done"
+   },
+   "fe-ptt": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). Push to talk with a text fallback when the mic is denied. Needs real-browser checks.",
+    "status": "review"
+   },
+   "be-diar": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). 3 mic constraints implemented. The noisy-room test needs a person.",
+    "status": "review"
+   },
+   "fe-presets": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). choosePresets tested for every risk state × language.",
+    "status": "done"
+   },
+   "be-conf-hard": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). README worked example, forward journey and fire-once rule pass in node:test.",
+    "status": "done"
+   },
+   "be-prof-hard": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). Mapping from 7 signals to 5 tags tested. The tag feeds the prompt and the debug overlay.",
+    "status": "done"
+   },
+   "be-kb": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 68b6a16 on branch release/2026-10-24 (not pushed yet). Retrieval-with-sources tests pass. Live citation needs a store.",
+    "status": "review"
+   },
+   "be-learn": {
+    "note_add": "\n\nBuild 9 Oct (review): commit d897e72 on branch release/2026-10-24 (not pushed yet). Post-call webhook (HMAC-signed, consent-gated) and redact paths built. Needs a live call.",
+    "status": "review"
+   },
+   "fe-onb": {
+    "note_add": "\n\nBuild 9 Oct (review): commit d897e72 on branch release/2026-10-24 (not pushed yet). Polaris onboarding flow plus preview, built without fe-forms designs because none were in the repo.",
+    "status": "review"
+   },
+   "be-callend": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 4a7ef7d on branch release/2026-10-24 (not pushed yet). qa:callend 9/9 paths return a known reason.",
+    "status": "done"
+   },
+   "be-geo": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 68b6a16 on branch release/2026-10-24 (not pushed yet). qa:tools 30/30 offline (100%); the bar was 90%.",
+    "status": "done"
+   },
+   "dep-tokens": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 68b6a16 on branch release/2026-10-24 (not pushed yet). Cost math and aggregation tested, but a call costs more than the €0.10 budget (B1).",
+    "status": "review"
+   },
+   "be-eval": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 68b6a16 on branch release/2026-10-24 (not pushed yet). Scoring for grounded, solved and purchased tested. Needs stored calls.",
+    "status": "review"
+   },
+   "dep-engine": {
+    "note_add": "\n\nBuild 9 Oct (done): commit d897e72 on branch release/2026-10-24 (not pushed yet). Browser engine built; the server stores its decisions on AnalyticsSession.",
+    "status": "done"
+   },
+   "app-shopify": {
+    "note_add": "\n\nBuild 9 Oct (review): commit d897e72 on branch release/2026-10-24 (not pushed yet). docs/app-review-checklist.md: 9 done, 5 explained, 2 blocked (B6, B7).",
+    "status": "review"
+   },
+   "app-caller": {
+    "note_add": "\n\nBuild 9 Oct (review): commit d897e72 on branch release/2026-10-24 (not pushed yet). /caller web-call entry built. Needs one demo call.",
+    "status": "review"
+   },
+   "qa-tools": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 0145814 on branch release/2026-10-24 (not pushed yet). 30/30.",
+    "status": "done"
+   },
+   "qa-profiling": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 0145814 on branch release/2026-10-24 (not pushed yet). 10/10 tags, 10/10 risk states.",
+    "status": "done"
+   },
+   "qa-callend": {
+    "note_add": "\n\nBuild 9 Oct (done): commit 0145814 on branch release/2026-10-24 (not pushed yet). 9/9.",
+    "status": "done"
+   },
+   "qa-session": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 0145814 on branch release/2026-10-24 (not pushed yet). 3/3 isolation checks pass offline.",
+    "status": "review"
+   },
+   "qa-tokens": {
+    "note_add": "\n\nBuild 9 Oct (review): commit 0145814 on branch release/2026-10-24 (not pushed yet). Cost model validated, but cost per call is over budget (B1).",
+    "status": "review"
+   },
+   "qa-latency": {
+    "note_add": "\n\nBuild 9 Oct (unchanged): commit 0145814 on branch release/2026-10-24 (not pushed yet). Blocked: there are no live samples yet (B2)."
+   },
+   "qa-voice": {
+    "note_add": "\n\nBuild 9 Oct (unchanged): commit 0145814 on branch release/2026-10-24 (not pushed yet). Blocked: the 20-call matrix is generated but hasn't been run (B3)."
+   },
+   "fe-forms": {
+    "note_add": "\n\nBuild 9 Oct (unchanged): Not in the build report. fe-onb was built without designs, so check whether these are still needed."
+   }
+  }
  }
 ]
