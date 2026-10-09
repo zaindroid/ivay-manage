@@ -175,6 +175,34 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
 .linkbtn{border:0;background:none;color:var(--accent);padding:0;font-weight:600}
 #confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
 
+
+/* Themes picked in the page override the system light/dark choice */
+:root[data-skin="daylight"]{--bg:#F2F4F0; --surface:#FFFFFF; --sunk:#E8ECE6; --ink:#141A17; --muted:#5B655F; --line:#D6DCD4; --accent:#2F45F5; --accent-ink:#FFFFFF; --accent-soft:#E3E7FF; --saleeta:#C92A70; --zain:#B76C00; --musharaf:#0B8A80; --team:#4A5560; --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB; color-scheme:light}
+:root[data-skin="graphite"]{--bg:#0E1210; --surface:#171C19; --sunk:#111613; --ink:#E7ECE7; --muted:#97A29B; --line:#29312C; --accent:#8291FF; --accent-ink:#0E1210; --accent-soft:#232A55; --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC; --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18; color-scheme:dark}
+:root[data-skin="midnight"]{--bg:#0A0F1E; --surface:#111933; --sunk:#0D1429; --ink:#E5EAF7; --muted:#8F9BBA; --line:#212B4A; --accent:#6EA8FF; --accent-ink:#0A0F1E; --accent-soft:#18284D; --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A3AECB; --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18; color-scheme:dark}
+:root[data-skin="nordic"]{--bg:#EDF1F5; --surface:#FFFFFF; --sunk:#E1E7EE; --ink:#0F1E2C; --muted:#536273; --line:#CDD6E0; --accent:#0F6CBD; --accent-ink:#FFFFFF; --accent-soft:#DCEAF7; --saleeta:#C92A70; --zain:#B76C00; --musharaf:#0B8A80; --team:#4B5A6A; --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB; color-scheme:light}
+:root[data-skin="forest"]{--bg:#0B1410; --surface:#122019; --sunk:#0E1913; --ink:#E3EEE7; --muted:#8FA79A; --line:#21342A; --accent:#5BD6A0; --accent-ink:#0B1410; --accent-soft:#183A2B; --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC; --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18; color-scheme:dark}
+:root[data-skin="contrast"]{--bg:#FFFFFF; --surface:#FFFFFF; --sunk:#F2F2F2; --ink:#000000; --muted:#2E2E2E; --line:#1A1A1A; --accent:#0033CC; --accent-ink:#FFFFFF; --accent-soft:#DDE5FF; --saleeta:#A3004F; --zain:#8A4B00; --musharaf:#00665E; --team:#222222; --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB; color-scheme:light}
+.xpchip{display:grid;gap:4px;justify-items:end;font-size:12px}
+.xpchip b{font-family:var(--f-display);font-size:15px}
+.xpbar{height:6px;border-radius:99px;background:var(--sunk);overflow:hidden;border:1px solid var(--line);width:160px;display:block}
+.xpbar span{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.lb{display:grid;gap:10px}
+.lbrow{display:grid;grid-template-columns:28px 1fr auto;gap:6px 10px;align-items:center;padding:10px 12px;border-radius:12px;background:var(--sunk)}
+.lbrow.me{outline:2px solid var(--accent);outline-offset:-2px}
+.rank{font-family:var(--f-display);font-weight:800;font-size:20px;color:var(--muted);text-align:center}
+.lbrow:first-child .rank{color:var(--accent)}
+.lbname{display:flex;gap:7px;align-items:center;font-weight:600;flex-wrap:wrap;min-width:0}
+.lvl{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.xpn{font-family:var(--f-display);font-weight:700;font-size:16px;text-align:right}
+.lbrow .xpbar{width:100%;grid-column:2/-1}
+.badges{grid-column:2/-1;display:flex;gap:5px;flex-wrap:wrap}
+.badge{font-size:11px;padding:2px 8px;border-radius:99px;border:1px solid var(--line);background:var(--surface);color:var(--ink);white-space:nowrap}
+.badge.locked{color:var(--muted);border-style:dashed;background:transparent;white-space:normal}
+.goal{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 12px;border:1px dashed var(--line);border-radius:10px}
+.goal .xpbar{width:100%}
+.xptag{font-family:var(--f-mono);font-size:10.5px;color:var(--accent);font-weight:600;white-space:nowrap}
+.skin{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 10px}
 @media (max-width:980px){
   .top{grid-template-columns:1fr;align-items:start}
   .count{justify-content:flex-start}
@@ -217,6 +245,7 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
       <div class="eyebrow">Signed in</div>
       <div class="who-row" id="whoRow"></div>
       <div class="signed"><button class="linkbtn" id="logoutBtn">Sign out</button></div>
+      <div class="xpchip" id="myXp"></div>
     </div>
   </header>
 
@@ -238,12 +267,13 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
         <span class="eyebrow mono" id="todayLabel"></span>
       </div>
       <div class="focus-list" id="focus"><div class="empty-note">Loading cards…</div></div>
+      <div class="goal" id="goal"></div>
       <div class="nudges" id="nudges"></div>
     </div>
     <div class="panel">
-      <h2>Team pulse</h2>
-      <div class="pulse" id="pulse"></div>
-      <div class="legend"><span><i style="background:var(--ok)"></i>done</span><span><i style="background:var(--accent)"></i>in progress or review</span><span><i style="background:var(--bad)"></i>overdue</span><span><i style="background:var(--sunk)"></i>still to do</span></div>
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap"><h2>Leaderboard</h2><span class="eyebrow">XP for every card shipped</span></div>
+      <div class="lb" id="pulse"></div>
+      <div class="empty-note">Blocker 30 XP · High 20 · Low 10, times effort (S ×1, M ×1.5, L ×2), plus 5 for finishing on time.</div>
     </div>
   </section>
 
@@ -256,6 +286,7 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
     <div class="filters" id="filters"></div>
     <div class="filters">
       <label class="chk"><input type="checkbox" id="showLater"> After-launch backlog</label>
+      <select class="skin" id="skinPick" aria-label="Theme"><option value="">Theme: match system</option><option value="daylight">Daylight</option><option value="graphite">Graphite</option><option value="midnight">Midnight</option><option value="nordic">Nordic</option><option value="forest">Forest</option><option value="contrast">High contrast</option></select>
       <button class="btn-primary" id="addBtn">Add card</button>
     </div>
   </div>
@@ -296,6 +327,30 @@ const ownerName = o => o || "Unclaimed";
 const PRI = {blocker:0,high:1,low:2};
 const PRI_LABEL = {blocker:["Blocker","t-bad"],high:["High","t-warn"],low:["Low",""]};
 const pri = c => PRI[c.priority] ?? 1;
+const XP_BASE = {blocker:30,high:20,low:10}, XP_MULT = {S:1,M:1.5,L:2}, DAILY_GOAL = 4;
+const LEVELS = [[0,"Kickoff"],[100,"Prototype"],[250,"Alpha"],[450,"Beta"],[700,"Release candidate"],[1000,"Shipped"],[1400,"Launch legend"]];
+const onTime = c => !!(c.doneAt && c.due && iso(new Date(c.doneAt)) <= c.due);
+const xpValue = c => Math.round((XP_BASE[c.priority||"high"]||20) * (XP_MULT[c.size]||1.5));
+const xpEarned = c => c.status==="done" ? xpValue(c) + (onTime(c)?5:0) : 0;
+function levelOf(xp){ let i = 0; LEVELS.forEach((l,k)=>{ if (xp >= l[0]) i = k; }); const cur = LEVELS[i], nxt = LEVELS[i+1];
+  return {n:i+1, name:cur[1], next:nxt?nxt[0]:null, nextName:nxt?nxt[1]:null, pct: nxt ? (xp-cur[0])/(nxt[0]-cur[0])*100 : 100}; }
+const BADGES = [
+  ["First ship","Finish your first card", d => d.length>=1],
+  ["Blocker buster","Finish 3 Blocker cards", d => d.filter(c=>c.priority==="blocker").length>=3],
+  ["Unblocker","Finish a card that 3+ others were waiting on", d => d.some(c=>unlocks(c.id).length>=3)],
+  ["On time","Finish 5 cards on or before their due day", d => d.filter(onTime).length>=5],
+  ["Full stack","Ship cards in 3 different areas", d => new Set(d.map(c=>c.area)).size>=3],
+  ["Hat trick","Finish 3 cards in one day", d => Object.values(d.reduce((m,c)=>{const k=iso(new Date(c.doneAt));m[k]=(m[k]||0)+1;return m},{})).some(n=>n>=3)],
+  ["Closer","Finish a Q&A or release card", d => d.some(c=>c.area==="qa")],
+];
+function statsFor(p){
+  const done = list().filter(c=>c.owner===p && c.status==="done" && c.doneAt);
+  const xp = done.reduce((a,c)=>a+xpEarned(c),0);
+  const days = new Set(done.map(c=>iso(new Date(c.doneAt))));
+  let streak = 0; const d = new Date(); if (!days.has(iso(d))) d.setDate(d.getDate()-1);
+  while (days.has(iso(d))) { streak++; d.setDate(d.getDate()-1); }
+  return {p, xp, lvl: levelOf(xp), done: done.length, active: list().filter(c=>c.owner===p&&(c.status==="doing"||c.status==="review")).length, streak, badges: BADGES.map(([n,h,f])=>({n,h,got:f(done)}))};
+}
 const FIT = {Saleeta:["frontend","apps","qa"],Zain:["backend","deploy","marketing","qa"],Musharaf:["backend","deploy","qa","apps"]};
 const ls = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
 
@@ -406,20 +461,25 @@ function renderFocus(){
   $("#nudges").innerHTML = n.join("");
 }
 function renderPulse(){
-  $("#pulse").innerHTML = PEOPLE.map(p => {
-    const cs = list().filter(c=>c.owner===p && c.prio!=="later");
-    const tot = cs.length || 1;
-    const done = cs.filter(c=>c.status==="done").length;
-    const act = cs.filter(c=>c.status==="doing"||c.status==="review").length;
-    const late = cs.filter(isLate).length;
-    const w = n => (n/tot*100).toFixed(1)+"%";
-    return `<div class="prow">
-      <span class="name"><span class="dot" style="--c:${col(p)}"></span>${p}</span>
-      <span class="stack" title="${done} done, ${act} active, ${late} overdue of ${cs.length}"><span style="width:${w(done)};background:var(--ok)"></span><span style="width:${w(act)};background:var(--accent)"></span><span style="width:${w(late)};background:var(--bad)"></span></span>
-      <span class="pstat mono">${done}/${cs.length} · ${act} active${act>WIP?" ⚑":""}</span>
-    </div>`;
-  }).join("") + (()=>{ const u = list().filter(c=>!c.owner && c.prio!=="later" && c.status!=="done"); const b = u.filter(c=>c.priority==="blocker").length;
-    return `<div class="prow"><span class="name"><span class="dot"></span>Unclaimed</span><span class="pstat" style="grid-column:2/-1">${u.length} cards waiting for an owner${b?`, <b style="color:var(--bad)">${b} blockers</b>`:""}</span></div>`; })() + `<div class="empty-note">Keep at most ${WIP} cards in progress each. Finishing beats starting, and it unblocks teammates sooner.</div>`;
+  const rows = PEOPLE.map(statsFor).sort((a,b)=>b.xp-a.xp || b.done-a.done);
+  $("#pulse").innerHTML = rows.map((r,k) => {
+    const nx = r.badges.find(b=>!b.got);
+    return `<div class="lbrow ${r.p===me?"me":""}">
+      <span class="rank">${k+1}</span>
+      <span class="lbname"><span class="dot" style="--c:${col(r.p)}"></span>${r.p} <span class="lvl">Lv ${r.lvl.n} · ${r.lvl.name}</span>${r.streak>=2?`<span class="lvl" style="color:var(--warn)">${r.streak}-day streak</span>`:""}</span>
+      <span class="xpn mono">${r.xp} XP</span>
+      <span class="xpbar" title="${r.lvl.next?`${r.lvl.next - r.xp} XP to ${r.lvl.nextName}`:"Top level"}"><span style="width:${r.lvl.pct.toFixed(1)}%"></span></span>
+      <span class="badges">${r.badges.filter(b=>b.got).map(b=>`<span class="badge" title="${esc(b.h)}">${esc(b.n)}</span>`).join("")}${nx?`<span class="badge locked" title="Next badge to unlock">Next: ${esc(nx.n)} (${esc(nx.h.toLowerCase())})</span>`:""}<span class="lvl" style="align-self:center">${r.done} shipped · ${r.active} active${r.active>WIP?" · over the limit of "+WIP:""}</span></span>
+    </div>`; }).join("") + (()=>{ const u = list().filter(c=>!c.owner && c.prio!=="later" && c.status!=="done"); const b = u.filter(c=>c.priority==="blocker").length;
+    return `<div class="empty-note">${u.length} cards still unclaimed${b?`, <b style="color:var(--bad)">${b} of them blockers</b>`:""}. Blockers are worth the most XP.</div>`; })();
+}
+function renderGame(){
+  const t = todayISO();
+  const n = list().filter(c=>c.status==="done" && c.doneAt && iso(new Date(c.doneAt))===t).length;
+  $("#goal").innerHTML = `<span class="eyebrow">Team goal today</span><span class="xpbar"><span style="width:${Math.min(100,n/DAILY_GOAL*100)}%"></span></span><span class="mono" style="font-weight:600">${n>=DAILY_GOAL?"Goal hit · ":""}${n}/${DAILY_GOAL} shipped</span>`;
+  if (!me){ $("#myXp").innerHTML = ""; return; }
+  const st = statsFor(me);
+  $("#myXp").innerHTML = `<span><span class="lvl">Lv ${st.lvl.n} · ${st.lvl.name}</span> <b class="mono">${st.xp} XP</b></span><span class="xpbar"><span style="width:${st.lvl.pct.toFixed(1)}%"></span></span><span class="empty-note">${st.lvl.next?`${st.lvl.next-st.xp} XP to ${st.lvl.nextName}`:"Top level reached"}</span>`;
 }
 
 /* ---------- filters / views ---------- */
@@ -441,6 +501,7 @@ function cardHTML(c){
       ${justUnblocked(c) ? `<span class="ftag t-ok">unblocked</span>` : ""}
       ${c.prio==="stretch" ? `<span class="chip">stretch</span>` : ""}
       <span class="ftag ${di.cls}" style="margin-left:auto">${di.txt}</span>
+      <span class="xptag">+${c.status==="done"?xpEarned(c):xpValue(c)} XP</span>
       ${(c.kudos||[]).length ? `<span class="chip">👏 ${c.kudos.length}</span>` : ""}
     </div>
   </div>`;
@@ -488,7 +549,7 @@ function renderActivity(){
     : `<div class="ev"><span></span><span class="empty-note">Moves, finishes and kudos show up here as the team works.</span><span></span></div>`}</div>`;
 }
 function render(){
-  renderHeader(); renderWave(); renderFocus(); renderPulse(); renderFilters();
+  renderHeader(); renderWave(); renderFocus(); renderPulse(); renderGame(); renderFilters();
   ({board:renderBoard,timeline:renderTimeline,activity:renderActivity}[view]||renderBoard)();
   if (openId) renderDrawer(openId);
 }
@@ -530,12 +591,19 @@ async function setStatus(id, status){
     toast(`Heads up: still waiting on ${waitingOn(c).map(d=>cards[d].title).join(", ")}.`, 5200);
   }
   const before = list().filter(x=>x.status==="todo" && isBlocked(x)).map(x=>x.id);
+  const who = extra.owner || c.owner;
+  const xpBefore = PEOPLE.includes(who) ? statsFor(who).xp : 0;
   const ok = await patch(id, {...extra, status, doneAt: status==="done" ? new Date().toISOString() : null});
   if (!ok) return;
   log(`${me||"Someone"} ${extra.owner?"claimed and ":""}${STATUS_WORD[status]} “${c.title}”`);
   if (status === "done"){
     const freed = before.filter(x => !isBlocked(cards[x]));
     celebrate();
+    if (PEOPLE.includes(who)){
+      const after = statsFor(who), gained = after.xp - xpBefore;
+      const up = after.lvl.n > levelOf(xpBefore).n;
+      setTimeout(()=>toast(up ? `Level up! ${who} reached ${after.lvl.name} (Lv ${after.lvl.n}). +${gained} XP` : `+${gained} XP for ${who}.${after.lvl.next?" "+(after.lvl.next-after.xp)+" XP to "+after.lvl.nextName+".":""}`, 5200), freed.length ? 6600 : 3900);
+    }
     if (freed.length){
       toast(`Done. That unblocked ${freed.length}: ${freed.map(x=>cards[x].title+" ("+ownerName(cards[x].owner)+")").join(", ")}`, 6500);
       log(`Unblocked: ${freed.map(x=>cards[x].title).join(", ")}`);
@@ -652,6 +720,9 @@ document.addEventListener("dragover", e => { const col = e.target.closest?.(".co
 document.addEventListener("drop", e => { const col = e.target.closest?.(".col"); if (!col || !dragId) return; e.preventDefault(); col.classList.remove("drop"); const id = dragId; dragId = null; setStatus(id, col.dataset.col); });
 
 /* ---------- boot ---------- */
+function applySkin(v){ if (v) document.documentElement.setAttribute("data-skin", v); else document.documentElement.removeAttribute("data-skin"); }
+const savedSkin = ls.get("ivay.skin") || ""; applySkin(savedSkin); $("#skinPick").value = savedSkin;
+$("#skinPick").addEventListener("change", e => { applySkin(e.target.value); ls.set("ivay.skin", e.target.value); });
 render();
 setInterval(()=>{ if (loaded) { renderHeader(); renderFocus(); } }, 60000);
 function showLogin(){ $("#login").hidden = false; setTimeout(()=>$("#lPass").focus(),0); }
