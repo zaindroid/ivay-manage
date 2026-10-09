@@ -11,27 +11,18 @@
 <style>
 /* Layout: a launch control room. Countdown + release waveform on top, personal focus beside team pulse, then the board. */
 :root{
-  --bg:#F2F4F0; --surface:#FFFFFF; --sunk:#E8ECE6; --ink:#141A17; --muted:#5B655F; --line:#D6DCD4;
-  --accent:#2F45F5; --accent-ink:#FFFFFF; --accent-soft:#E3E7FF;
-  --saleeta:#C92A70; --zain:#B76C00; --musharaf:#0B8A80; --team:#4A5560;
-  --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB;
-  --shadow:0 1px 2px rgba(20,26,23,.06),0 6px 18px -10px rgba(20,26,23,.25);
+  --bg:#F7F8F7; --surface:#FFFFFF; --sunk:#F2F4F3; --ink:#1A1F1C; --muted:#6E7671; --line:#E6E9E7; --accent:#4757D9; --accent-ink:#FFFFFF; --accent-soft:#ECEEFC; --saleeta:#B8487A; --zain:#A86F1E; --musharaf:#2A8A80; --team:#5E6762; --ok:#2E8B57; --warn:#A8741E; --bad:#C24A40; --ok-soft:#E7F3EC; --warn-soft:#F7EEDC; --bad-soft:#F8E6E4;
+  --shadow:0 1px 2px rgba(20,26,23,.04);
   --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
   --f-body:"Onest","Segoe UI",system-ui,-apple-system,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0E1210; --surface:#171C19; --sunk:#111613; --ink:#E7ECE7; --muted:#97A29B; --line:#29312C;
-  --accent:#8291FF; --accent-ink:#0E1210; --accent-soft:#232A55;
-  --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC;
-  --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px -12px rgba(0,0,0,.7); color-scheme:dark}}
+  --bg:#141716; --surface:#1A1E1C; --sunk:#171B19; --ink:#E4E8E5; --muted:#8E9892; --line:#262C29; --accent:#8C98F5; --accent-ink:#141716; --accent-soft:#262B4A; --saleeta:#E487B0; --zain:#E2AE63; --musharaf:#6CC6BC; --team:#9AA49F; --ok:#6CC795; --warn:#E2B663; --bad:#EE8077; --ok-soft:#1D2C24; --warn-soft:#2E2717; --bad-soft:#33201E;
+  --shadow:none; color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0E1210; --surface:#171C19; --sunk:#111613; --ink:#E7ECE7; --muted:#97A29B; --line:#29312C;
-  --accent:#8291FF; --accent-ink:#0E1210; --accent-soft:#232A55;
-  --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC;
-  --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18;
-  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px -12px rgba(0,0,0,.7); color-scheme:dark}
+  --bg:#141716; --surface:#1A1E1C; --sunk:#171B19; --ink:#E4E8E5; --muted:#8E9892; --line:#262C29; --accent:#8C98F5; --accent-ink:#141716; --accent-soft:#262B4A; --saleeta:#E487B0; --zain:#E2AE63; --musharaf:#6CC6BC; --team:#9AA49F; --ok:#6CC795; --warn:#E2B663; --bad:#EE8077; --ok-soft:#1D2C24; --warn-soft:#2E2717; --bad-soft:#33201E;
+  --shadow:none; color-scheme:dark}
 *{box-sizing:border-box}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.45}
 .wrap{max-width:1380px;margin:0 auto;padding-inline:20px;padding-block:20px 60px;display:grid;gap:18px}
@@ -177,8 +168,8 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
 
 
 /* Themes picked in the page override the system light/dark choice */
-:root[data-skin="daylight"]{--bg:#F2F4F0; --surface:#FFFFFF; --sunk:#E8ECE6; --ink:#141A17; --muted:#5B655F; --line:#D6DCD4; --accent:#2F45F5; --accent-ink:#FFFFFF; --accent-soft:#E3E7FF; --saleeta:#C92A70; --zain:#B76C00; --musharaf:#0B8A80; --team:#4A5560; --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB; color-scheme:light}
-:root[data-skin="graphite"]{--bg:#0E1210; --surface:#171C19; --sunk:#111613; --ink:#E7ECE7; --muted:#97A29B; --line:#29312C; --accent:#8291FF; --accent-ink:#0E1210; --accent-soft:#232A55; --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC; --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18; color-scheme:dark}
+:root[data-skin="daylight"]{--bg:#F7F8F7; --surface:#FFFFFF; --sunk:#F2F4F3; --ink:#1A1F1C; --muted:#6E7671; --line:#E6E9E7; --accent:#4757D9; --accent-ink:#FFFFFF; --accent-soft:#ECEEFC; --saleeta:#B8487A; --zain:#A86F1E; --musharaf:#2A8A80; --team:#5E6762; --ok:#2E8B57; --warn:#A8741E; --bad:#C24A40; --ok-soft:#E7F3EC; --warn-soft:#F7EEDC; --bad-soft:#F8E6E4; color-scheme:light}
+:root[data-skin="graphite"]{--bg:#141716; --surface:#1A1E1C; --sunk:#171B19; --ink:#E4E8E5; --muted:#8E9892; --line:#262C29; --accent:#8C98F5; --accent-ink:#141716; --accent-soft:#262B4A; --saleeta:#E487B0; --zain:#E2AE63; --musharaf:#6CC6BC; --team:#9AA49F; --ok:#6CC795; --warn:#E2B663; --bad:#EE8077; --ok-soft:#1D2C24; --warn-soft:#2E2717; --bad-soft:#33201E; color-scheme:dark}
 :root[data-skin="midnight"]{--bg:#0A0F1E; --surface:#111933; --sunk:#0D1429; --ink:#E5EAF7; --muted:#8F9BBA; --line:#212B4A; --accent:#6EA8FF; --accent-ink:#0A0F1E; --accent-soft:#18284D; --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A3AECB; --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18; color-scheme:dark}
 :root[data-skin="nordic"]{--bg:#EDF1F5; --surface:#FFFFFF; --sunk:#E1E7EE; --ink:#0F1E2C; --muted:#536273; --line:#CDD6E0; --accent:#0F6CBD; --accent-ink:#FFFFFF; --accent-soft:#DCEAF7; --saleeta:#C92A70; --zain:#B76C00; --musharaf:#0B8A80; --team:#4B5A6A; --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB; color-scheme:light}
 :root[data-skin="forest"]{--bg:#0B1410; --surface:#122019; --sunk:#0E1913; --ink:#E3EEE7; --muted:#8FA79A; --line:#21342A; --accent:#5BD6A0; --accent-ink:#0B1410; --accent-soft:#183A2B; --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC; --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18; color-scheme:dark}
@@ -203,6 +194,29 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
 .goal .xpbar{width:100%}
 .xptag{font-family:var(--f-mono);font-size:10.5px;color:var(--accent);font-weight:600;white-space:nowrap}
 .skin{font:inherit;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:9px;padding:7px 10px}
+/* Calm, minimal pass */
+.panel{border-color:transparent;border-radius:16px;padding:20px}
+.card{box-shadow:none;border-radius:12px;padding:12px 13px;gap:8px}
+.card:hover{transform:none;border-color:var(--muted)}
+.col{background:transparent;border:0;padding:4px 0;gap:10px}
+.col.drop{background:var(--accent-soft);border-radius:14px}
+.col-head h3{font-size:14px;font-weight:600;font-family:var(--f-body)}
+.brand h1,.panel h2,.drawer h2{font-weight:700}
+.tminus{font-size:clamp(36px,5vw,56px);font-weight:700}
+.fitem{background:transparent;border:1px solid var(--line);padding:10px 12px}
+.fitem:hover{border-color:var(--muted)}
+.lbrow{background:transparent;border:1px solid var(--line)}
+.goal{border-style:solid}
+.pri{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;color:var(--muted);white-space:nowrap}
+.pri::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--muted)}
+.pri.blocker{color:var(--bad)}.pri.blocker::before{background:var(--bad)}
+.pri.high::before{background:var(--warn)}
+.due{font-size:11.5px;color:var(--muted);white-space:nowrap}
+.due.t-bad{color:var(--bad);background:none;padding:0}.due.t-warn{color:var(--warn);background:none;padding:0}.due.t-ok{color:var(--ok);background:none;padding:0}.due.t-acc{color:var(--accent);background:none;padding:0}
+.xptag{color:var(--muted);font-weight:400}
+.av.empty{background:transparent;border:1px dashed var(--muted);color:var(--muted)}
+.toptools{display:flex;gap:8px;align-items:center;justify-content:flex-end}
+.toolbar{background:var(--bg)}
 @media (max-width:980px){
   .top{grid-template-columns:1fr;align-items:start}
   .count{justify-content:flex-start}
@@ -246,12 +260,13 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
       <div class="who-row" id="whoRow"></div>
       <div class="signed"><button class="linkbtn" id="logoutBtn">Sign out</button></div>
       <div class="xpchip" id="myXp"></div>
+      <div class="toptools"><select class="skin" id="skinPick" aria-label="Theme"><option value="">Theme: system</option><option value="daylight">Daylight</option><option value="graphite">Graphite</option><option value="midnight">Midnight</option><option value="nordic">Nordic</option><option value="forest">Forest</option><option value="contrast">High contrast</option></select></div>
     </div>
   </header>
 
   <div id="banner" class="banner" hidden></div>
 
-  <section class="wave" aria-label="Release waveform">
+  <section class="wave" aria-label="Release waveform" hidden>
     <div class="wave-head">
       <div><span class="eyebrow">Release waveform</span> <span class="empty-note">· one bar per card, ordered by due day. Click a bar to open it.</span></div>
       <div class="legend"><span><i style="background:var(--ink)"></i>done (colour of whoever took it)</span><span><i style="background:repeating-linear-gradient(135deg,var(--ink) 0 2px,transparent 2px 4px)"></i>in progress</span><span><i style="border:2px solid var(--bad)"></i>late</span></div>
@@ -286,7 +301,6 @@ label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
     <div class="filters" id="filters"></div>
     <div class="filters">
       <label class="chk"><input type="checkbox" id="showLater"> After-launch backlog</label>
-      <select class="skin" id="skinPick" aria-label="Theme"><option value="">Theme: match system</option><option value="daylight">Daylight</option><option value="graphite">Graphite</option><option value="midnight">Midnight</option><option value="nordic">Nordic</option><option value="forest">Forest</option><option value="contrast">High contrast</option></select>
       <button class="btn-primary" id="addBtn">Add card</button>
     </div>
   </div>
@@ -437,7 +451,7 @@ function renderFocus(){
   $("#focusTitle").textContent = me ? `${me}, your next moves` : "Today on the board";
   if (!loaded){ return; }
   if (!list().length){ $("#focus").innerHTML = `<div class="empty-note">No cards yet. Use Add card to put the first task on the board.</div>`; $("#nudges").innerHTML=""; return; }
-  const items = focusItems(me).slice(0, me ? 5 : 6);
+  const items = focusItems(me).slice(0, 4);
   $("#focus").innerHTML = items.length ? items.map(({c,tag,cls}) => `
     <button class="fitem" data-open="${c.id}">
       <span class="ftag ${cls}">${tag}</span>
@@ -457,7 +471,7 @@ function renderFocus(){
   if (ub.length) n.push(`<button class="nudge" data-open="${ub.sort((a,b)=>(a.due||"").localeCompare(b.due||""))[0].id}"><b style="color:var(--bad)">${ub.length} unclaimed blocker${ub.length>1?"s":""}</b> ready to take</button>`);
   // biggest blocker: undone card that blocks the most others
   const blockers = list().filter(c=>c.status!=="done").map(c=>({c,n:unlocks(c.id).filter(u=>u.status!=="done").length})).sort((a,b)=>b.n-a.n);
-  if (blockers[0] && blockers[0].n >= 3) n.push(`<button class="nudge" data-open="${blockers[0].c.id}">Biggest blocker: <b>${esc(blockers[0].c.title)}</b> holds up ${blockers[0].n} cards</button>`);
+  if (false && blockers[0]) n.push(`<button class="nudge" data-open="${blockers[0].c.id}">Biggest blocker: <b>${esc(blockers[0].c.title)}</b> holds up ${blockers[0].n} cards</button>`);
   $("#nudges").innerHTML = n.join("");
 }
 function renderPulse(){
@@ -469,7 +483,7 @@ function renderPulse(){
       <span class="lbname"><span class="dot" style="--c:${col(r.p)}"></span>${r.p} <span class="lvl">Lv ${r.lvl.n} · ${r.lvl.name}</span>${r.streak>=2?`<span class="lvl" style="color:var(--warn)">${r.streak}-day streak</span>`:""}</span>
       <span class="xpn mono">${r.xp} XP</span>
       <span class="xpbar" title="${r.lvl.next?`${r.lvl.next - r.xp} XP to ${r.lvl.nextName}`:"Top level"}"><span style="width:${r.lvl.pct.toFixed(1)}%"></span></span>
-      <span class="badges">${r.badges.filter(b=>b.got).map(b=>`<span class="badge" title="${esc(b.h)}">${esc(b.n)}</span>`).join("")}${nx?`<span class="badge locked" title="Next badge to unlock">Next: ${esc(nx.n)} (${esc(nx.h.toLowerCase())})</span>`:""}<span class="lvl" style="align-self:center">${r.done} shipped · ${r.active} active${r.active>WIP?" · over the limit of "+WIP:""}</span></span>
+      ${r.badges.some(b=>b.got)?"":"<!--"}<span class="badges">${r.badges.filter(b=>b.got).map(b=>`<span class="badge" title="${esc(b.h)}">${esc(b.n)}</span>`).join("")}</span>${r.badges.some(b=>b.got)?"":"-->"}
     </div>`; }).join("") + (()=>{ const u = list().filter(c=>!c.owner && c.prio!=="later" && c.status!=="done"); const b = u.filter(c=>c.priority==="blocker").length;
     return `<div class="empty-note">${u.length} cards still unclaimed${b?`, <b style="color:var(--bad)">${b} of them blockers</b>`:""}. Blockers are worth the most XP.</div>`; })();
 }
@@ -491,17 +505,14 @@ function renderFilters(){
 function cardHTML(c){
   const di = dueInfo(c), blocked = isBlocked(c), w = waitingOn(c);
   return `<div class="card ${blocked?"blocked":""} ${c.status==="done"?"done":""}" draggable="${!readOnly}" tabindex="0" data-id="${c.id}" data-open="${c.id}" style="--c:${col(c.owner)}">
-    <span class="owner-edge"></span>
-    <div class="cmeta"><span class="cgroup">${esc(AREAS[c.area]||c.area)} · ${esc(c.group)}</span><span class="size" title="Effort">${esc(c.size||"")}</span></div>
+    <div class="cmeta"><span class="cgroup">${esc(AREAS[c.area]||c.area)}</span><span class="pri ${c.priority||"high"}">${PRI_LABEL[c.priority||"high"][0]}</span></div>
     <div class="ctitle">${esc(c.title)}</div>
     <div class="cfoot">
-      <span class="ftag ${PRI_LABEL[c.priority||"high"][1]}">${PRI_LABEL[c.priority||"high"][0]}</span>
-      ${c.owner ? `<span class="av" style="--c:${col(c.owner)}" title="${esc(c.owner)}">${esc(ini(c.owner))}</span>` : `<span class="chip">unclaimed</span>`}
-      ${blocked ? `<span class="chip" title="Waiting on: ${esc(w.map(d=>cards[d]?.title).join(", "))}">waiting on ${w.length}</span>` : ""}
-      ${justUnblocked(c) ? `<span class="ftag t-ok">unblocked</span>` : ""}
-      ${c.prio==="stretch" ? `<span class="chip">stretch</span>` : ""}
-      <span class="ftag ${di.cls}" style="margin-left:auto">${di.txt}</span>
-      <span class="xptag">+${c.status==="done"?xpEarned(c):xpValue(c)} XP</span>
+      ${c.owner ? `<span class="av" style="--c:${col(c.owner)}" title="${esc(c.owner)}">${esc(ini(c.owner))}</span>` : `<span class="av empty" title="Unclaimed">+</span>`}
+      ${blocked ? `<span class="due" title="Waiting on: ${esc(w.map(d=>cards[d]?.title).join(", "))}">waiting on ${w.length}</span>` : justUnblocked(c) ? `<span class="due t-ok">unblocked</span>` : ""}
+      ${c.prio==="stretch" ? `<span class="due">stretch</span>` : ""}
+      <span class="due ${di.cls}" style="margin-left:auto">${di.txt}</span>
+      <span class="xptag">${c.status==="done"?xpEarned(c):xpValue(c)} XP</span>
       ${(c.kudos||[]).length ? `<span class="chip">👏 ${c.kudos.length}</span>` : ""}
     </div>
   </div>`;
