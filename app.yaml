@@ -1,0 +1,10 @@
+name: ivay-launch-board
+memory_mb: 128
+port: 8080
+persistent_storage:
+  mount_path: /data
+env:
+  SESSION_SECRET:
+    generate: hex
+  BOARD_PASSCODE:
+    required: true

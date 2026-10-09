@@ -1,0 +1,684 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Ivay Launch Board</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Onest:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: a launch control room. Countdown + release waveform on top, personal focus beside team pulse, then the board. */
+:root{
+  --bg:#F2F4F0; --surface:#FFFFFF; --sunk:#E8ECE6; --ink:#141A17; --muted:#5B655F; --line:#D6DCD4;
+  --accent:#2F45F5; --accent-ink:#FFFFFF; --accent-soft:#E3E7FF;
+  --saleeta:#C92A70; --zain:#B76C00; --musharaf:#0B8A80; --team:#4A5560;
+  --ok:#1E8A4B; --warn:#A86400; --bad:#C2302B; --ok-soft:#DDF2E5; --warn-soft:#FBEBCB; --bad-soft:#FADDDB;
+  --shadow:0 1px 2px rgba(20,26,23,.06),0 6px 18px -10px rgba(20,26,23,.25);
+  --f-display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --f-body:"Onest","Segoe UI",system-ui,-apple-system,sans-serif;
+  --f-mono:"JetBrains Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1210; --surface:#171C19; --sunk:#111613; --ink:#E7ECE7; --muted:#97A29B; --line:#29312C;
+  --accent:#8291FF; --accent-ink:#0E1210; --accent-soft:#232A55;
+  --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC;
+  --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px -12px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1210; --surface:#171C19; --sunk:#111613; --ink:#E7ECE7; --muted:#97A29B; --line:#29312C;
+  --accent:#8291FF; --accent-ink:#0E1210; --accent-soft:#232A55;
+  --saleeta:#F06AA6; --zain:#F1A73E; --musharaf:#3FC8BC; --team:#A8B3BC;
+  --ok:#4FCB86; --warn:#F1B43C; --bad:#FF6D63; --ok-soft:#173326; --warn-soft:#3A2D12; --bad-soft:#3D1A18;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px -12px rgba(0,0,0,.7); color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:14px;line-height:1.45}
+.wrap{max-width:1380px;margin:0 auto;padding-inline:20px;padding-block:20px 60px;display:grid;gap:18px}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible,.card:focus-visible,.bar:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.mono{font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.eyebrow{font-family:var(--f-mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+
+/* Top */
+.top{display:grid;grid-template-columns:auto 1fr auto;gap:24px;align-items:end}
+.brand h1{font-family:var(--f-display);font-weight:800;font-size:clamp(28px,4vw,44px);line-height:1;margin:6px 0 0;letter-spacing:-.02em;text-wrap:balance}
+.brand h1 span{color:var(--accent)}
+.count{display:flex;gap:18px;align-items:flex-end;justify-content:center;flex-wrap:wrap}
+.tminus{font-family:var(--f-display);font-weight:800;font-size:clamp(44px,7vw,78px);line-height:.85;letter-spacing:-.04em}
+.tminus small{font-size:.32em;letter-spacing:0;font-weight:700;color:var(--muted);margin-left:4px}
+.meter{min-width:180px;display:grid;gap:6px}
+.meter .track{height:10px;border-radius:99px;background:var(--sunk);overflow:hidden;border:1px solid var(--line)}
+.meter .fill{height:100%;background:var(--accent);border-radius:99px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.meter b{font-family:var(--f-display);font-size:22px}
+.who{display:grid;gap:6px;justify-items:end}
+.who-row{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.pill{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:6px 12px;font-weight:500;display:inline-flex;gap:7px;align-items:center}
+.pill[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--c,var(--team));flex:none}
+
+/* Waveform */
+.wave{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px 16px 10px;display:grid;gap:8px}
+.wave-head{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bars{display:flex;align-items:flex-end;gap:3px;height:64px}
+.bar{flex:1 1 0;min-width:3px;border-radius:3px 3px 1px 1px;background:var(--sunk);border:1px solid var(--line);padding:0;transition:transform .15s,background .3s}
+.bar:hover{transform:scaleY(1.08)}
+.bar.done{background:var(--c);border-color:var(--c)}
+.bar.doing,.bar.review{background:repeating-linear-gradient(135deg,var(--c) 0 3px,transparent 3px 6px);border-color:var(--c)}
+.bar.late{border-color:var(--bad);border-width:2px}
+.bar.stretch{opacity:.55}
+.axis{display:grid;grid-template-columns:repeat(16,1fr);font-family:var(--f-mono);font-size:10px;color:var(--muted)}
+.axis span.today{color:var(--accent);font-weight:600}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+
+/* Focus + pulse */
+.row2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:18px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:grid;gap:12px;align-content:start;min-width:0}
+.panel h2{font-family:var(--f-display);font-size:20px;margin:0;font-weight:700;letter-spacing:-.01em}
+.focus-list{display:grid;gap:8px}
+.fitem{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:10px;background:var(--sunk);border:1px solid transparent;text-align:left;width:100%}
+.fitem:hover{border-color:var(--line)}
+.ftag{font-family:var(--f-mono);font-size:10.5px;font-weight:600;letter-spacing:.05em;text-transform:uppercase;padding:3px 7px;border-radius:5px;white-space:nowrap}
+.t-bad{background:var(--bad-soft);color:var(--bad)} .t-warn{background:var(--warn-soft);color:var(--warn)} .t-ok{background:var(--ok-soft);color:var(--ok)} .t-acc{background:var(--accent-soft);color:var(--accent)}
+.nudges{display:flex;gap:8px;flex-wrap:wrap}
+.nudge{font-size:12.5px;padding:5px 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface)}
+.pulse{display:grid;gap:12px}
+.prow{display:grid;grid-template-columns:96px 1fr auto;gap:10px;align-items:center}
+.prow .name{display:flex;gap:7px;align-items:center;font-weight:600}
+.stack{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--sunk);border:1px solid var(--line)}
+.stack span{display:block;height:100%}
+.pstat{font-size:12px;color:var(--muted);white-space:nowrap}
+.empty-note{color:var(--muted);font-size:13px}
+
+/* Toolbar */
+.toolbar{display:flex;gap:10px;align-items:center;justify-content:space-between;flex-wrap:wrap;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px}
+.tabs{display:flex;gap:4px;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:3px}
+.tab{border:0;background:transparent;padding:7px 14px;border-radius:7px;font-weight:600}
+.tab[aria-selected="true"]{background:var(--surface);box-shadow:var(--shadow)}
+.filters{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.btn-primary{background:var(--accent);color:var(--accent-ink);border:0;border-radius:9px;padding:8px 14px;font-weight:600}
+.chk{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--muted)}
+
+/* Board */
+.board{display:grid;grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));gap:14px;align-items:start}
+.col{background:var(--sunk);border:1px solid var(--line);border-radius:14px;padding:10px;display:grid;gap:8px;min-height:160px;align-content:start;transition:background .15s,border-color .15s}
+.col.drop{border-color:var(--accent);background:var(--accent-soft)}
+.col-head{display:flex;justify-content:space-between;align-items:baseline;padding:2px 4px 4px}
+.col-head h3{margin:0;font-family:var(--f-display);font-size:16px;font-weight:700}
+.col-head .mono{color:var(--muted);font-size:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:10px 11px;display:grid;gap:7px;cursor:pointer;box-shadow:var(--shadow);position:relative;text-align:left;width:100%;transition:transform .12s,box-shadow .12s}
+.card:hover{transform:translateY(-1px)}
+.card.dragging{opacity:.45}
+.card.blocked{background:transparent;box-shadow:none;border-style:dashed}
+.card.blocked .ctitle{color:var(--muted)}
+.card.done .ctitle{text-decoration:line-through;text-decoration-color:var(--muted);color:var(--muted)}
+.card .owner-edge{position:absolute;left:-1px;top:10px;bottom:10px;width:3px;border-radius:0 3px 3px 0;background:var(--c)}
+.cmeta{display:flex;justify-content:space-between;gap:8px;font-size:11.5px;color:var(--muted);align-items:center}
+.cgroup{font-family:var(--f-mono);font-size:10.5px;letter-spacing:.04em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
+.ctitle{font-weight:600;font-size:13.5px;line-height:1.3}
+.cfoot{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.chip{font-size:11px;padding:2px 7px;border-radius:5px;background:var(--sunk);border:1px solid var(--line);white-space:nowrap}
+.av{width:22px;height:22px;border-radius:50%;background:var(--c);color:var(--surface);display:grid;place-items:center;font-size:11px;font-weight:700;flex:none}
+.size{font-family:var(--f-mono);font-size:10.5px;color:var(--muted)}
+.waiting{border-top:1px dashed var(--line);padding-top:8px}
+.waiting summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--muted);padding:4px;list-style-position:inside}
+.wait-list{display:grid;gap:8px;margin-top:8px}
+.col-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:20px 8px;border:1px dashed var(--line);border-radius:10px}
+
+/* Timeline */
+.tl-scroll{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.tl{min-width:980px;display:grid;grid-template-columns:200px repeat(16,1fr);position:relative}
+.tl .hd{font-family:var(--f-mono);font-size:10.5px;color:var(--muted);padding:8px 4px;border-bottom:1px solid var(--line);text-align:center}
+.tl .hd.today{color:var(--accent);font-weight:600}
+.tl .hd.wk{background:var(--sunk)}
+.tl .lane{grid-column:1/-1;font-family:var(--f-display);font-weight:700;padding:10px 12px 4px;display:flex;gap:8px;align-items:center;border-top:1px solid var(--line)}
+.tl .lab{font-size:12px;padding:3px 12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--muted);align-self:center}
+.tl .seg{height:20px;margin:3px 1px;border-radius:5px;align-self:center;border:1px solid var(--c);background:color-mix(in srgb,var(--c) 18%,transparent);cursor:pointer;padding:0}
+.tl .seg.done{background:var(--c)}
+.tl .seg.doing,.tl .seg.review{background:repeating-linear-gradient(135deg,var(--c) 0 3px,transparent 3px 7px)}
+.tl .seg.late{outline:2px solid var(--bad);outline-offset:1px}
+.tl .seg.stretch{border-style:dashed}
+
+/* Activity */
+.feed{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:6px 16px;display:grid}
+.ev{display:grid;grid-template-columns:auto 1fr auto;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);align-items:center}
+.ev:last-child{border-bottom:0}
+.ev time{font-family:var(--f-mono);font-size:11px;color:var(--muted);white-space:nowrap}
+
+/* Drawer */
+.scrim{position:fixed;inset:0;background:rgba(10,14,12,.38);z-index:20}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--surface);border-left:1px solid var(--line);z-index:21;overflow-y:auto;padding:20px 20px calc(24px + env(safe-area-inset-bottom,0px));display:grid;gap:16px;align-content:start;box-shadow:-20px 0 40px -20px rgba(0,0,0,.35)}
+.drawer h2{font-family:var(--f-display);font-size:24px;margin:0;line-height:1.15;text-wrap:balance}
+.dhead{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.x{border:1px solid var(--line);background:var(--surface);border-radius:8px;width:34px;height:34px;flex:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.f{display:grid;gap:4px;font-size:12px;color:var(--muted)}
+.f input,.f select,.f textarea{font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%}
+.f textarea{min-height:80px;resize:vertical}
+.actions{display:flex;gap:8px;flex-wrap:wrap}
+.act{border:1px solid var(--line);background:var(--surface);border-radius:9px;padding:9px 14px;font-weight:600}
+.act.main{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.act.good{background:var(--ok);color:var(--surface);border-color:var(--ok)}
+.deps{display:grid;gap:6px}
+.dep{display:flex;gap:8px;align-items:center;font-size:13px;padding:7px 10px;border-radius:8px;background:var(--sunk);border:0;text-align:left;width:100%}
+.dep .st{margin-left:auto}
+.kudos{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:11px;z-index:40;max-width:min(560px,calc(100% - 32px));font-weight:500;box-shadow:var(--shadow)}
+.banner{background:var(--warn-soft);color:var(--ink);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.login{position:fixed;inset:0;z-index:60;background:var(--bg);display:grid;place-items:center;padding-inline:16px}
+.login form{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:24px;display:grid;gap:14px;width:min(380px,100%);box-shadow:var(--shadow)}
+.login h2{font-family:var(--f-display);font-size:28px;margin:0}
+.login .err{color:var(--bad);font-size:13px;min-height:1em}
+.signed{font-size:12.5px;color:var(--muted);display:flex;gap:8px;align-items:center}
+.linkbtn{border:0;background:none;color:var(--accent);padding:0;font-weight:600}
+#confetti{position:fixed;inset:0;pointer-events:none;z-index:50}
+
+@media (max-width:980px){
+  .top{grid-template-columns:1fr;align-items:start}
+  .count{justify-content:flex-start}
+  .who{justify-items:start}.who-row{justify-content:flex-start}
+  .row2{grid-template-columns:1fr}
+  .board{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:560px){
+  .wrap{padding-inline:16px}
+  .board{grid-template-columns:1fr}
+  .bars{gap:2px}
+  .axis span:nth-child(even){visibility:hidden}
+  .prow{grid-template-columns:84px 1fr}
+  .prow .pstat{grid-column:1/-1}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <div class="eyebrow">Ivay · first market release</div>
+      <h1>Launch <span>board</span></h1>
+    </div>
+    <div class="count">
+      <div>
+        <div class="eyebrow" id="launchLabel">Launch Sat 24 Oct</div>
+        <div class="tminus mono" id="tminus">T–15<small>days</small></div>
+      </div>
+      <div class="meter">
+        <div class="eyebrow">Launch scope shipped</div>
+        <b class="mono" id="pct">0%</b>
+        <div class="track"><div class="fill" id="pctFill" style="width:0%"></div></div>
+      </div>
+    </div>
+    <div class="who">
+      <div class="eyebrow">Signed in</div>
+      <div class="who-row" id="whoRow"></div>
+      <div class="signed"><button class="linkbtn" id="logoutBtn">Sign out</button></div>
+    </div>
+  </header>
+
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="wave" aria-label="Release waveform">
+    <div class="wave-head">
+      <div><span class="eyebrow">Release waveform</span> <span class="empty-note">· one bar per card, ordered by due day. Click a bar to open it.</span></div>
+      <div class="legend"><span><i style="background:var(--ink)"></i>done (colour of whoever took it)</span><span><i style="background:repeating-linear-gradient(135deg,var(--ink) 0 2px,transparent 2px 4px)"></i>in progress</span><span><i style="border:2px solid var(--bad)"></i>late</span></div>
+    </div>
+    <div class="bars" id="bars"></div>
+    <div class="axis" id="axis"></div>
+  </section>
+
+  <section class="row2">
+    <div class="panel">
+      <div style="display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap">
+        <h2 id="focusTitle">Today on the board</h2>
+        <span class="eyebrow mono" id="todayLabel"></span>
+      </div>
+      <div class="focus-list" id="focus"><div class="empty-note">Loading cards…</div></div>
+      <div class="nudges" id="nudges"></div>
+    </div>
+    <div class="panel">
+      <h2>Team pulse</h2>
+      <div class="pulse" id="pulse"></div>
+      <div class="legend"><span><i style="background:var(--ok)"></i>done</span><span><i style="background:var(--accent)"></i>in progress or review</span><span><i style="background:var(--bad)"></i>overdue</span><span><i style="background:var(--sunk)"></i>still to do</span></div>
+    </div>
+  </section>
+
+  <div class="toolbar">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-view="board" aria-selected="true">Board</button>
+      <button class="tab" role="tab" data-view="timeline" aria-selected="false">Timeline</button>
+      <button class="tab" role="tab" data-view="activity" aria-selected="false">Activity</button>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="filters">
+      <label class="chk"><input type="checkbox" id="showLater"> After-launch backlog</label>
+      <button class="btn-primary" id="addBtn">Add card</button>
+    </div>
+  </div>
+
+  <main id="view"></main>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" hidden aria-modal="true" role="dialog"></aside>
+<div class="toast" id="toast" hidden role="status"></div>
+<canvas id="confetti" hidden></canvas>
+<div class="login" id="login" hidden>
+  <form id="loginForm">
+    <div class="eyebrow">Ivay · first market release</div>
+    <h2>Launch board</h2>
+    <label class="f">Who are you?<select id="lName"><option>Saleeta</option><option>Zain</option><option>Musharaf</option></select></label>
+    <label class="f">Team passcode<input id="lPass" type="password" autocomplete="current-password" required></label>
+    <div class="err" id="lErr" role="alert"></div>
+    <button class="act main" type="submit">Sign in</button>
+  </form>
+</div>
+
+<script>
+(function(){
+const START = new Date(2026,9,9), LAUNCH_DAY = 16;
+const PEOPLE = ["Saleeta","Zain","Musharaf"];
+const OWNERS = [...PEOPLE,"Team"];
+const ROLE = {Saleeta:"Frontend",Zain:"Backend · deploy · marketing",Musharaf:"Backend · deploy",Team:"Everyone"};
+const COLS = [["todo","Ready to pick"],["doing","In progress"],["review","In review"],["done","Done"]];
+const AREAS = {deploy:"Deployment",backend:"Backend",frontend:"Frontend",apps:"Apps",qa:"Q&A",marketing:"Marketing"};
+const SIZE_PTS = {S:1,M:2,L:3};
+const WIP = 2;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const col = o => `var(--${(o||"team").toLowerCase()})`;
+const ini = o => o ? o[0] : "+";
+const ownerName = o => o || "Unclaimed";
+const PRI = {blocker:0,high:1,low:2};
+const PRI_LABEL = {blocker:["Blocker","t-bad"],high:["High","t-warn"],low:["Low",""]};
+const pri = c => PRI[c.priority] ?? 1;
+const FIT = {Saleeta:["frontend","apps","qa"],Zain:["backend","deploy","marketing","qa"],Musharaf:["backend","deploy","qa","apps"]};
+const ls = {get(k){try{return localStorage.getItem(k)}catch(e){return null}}, set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+
+let cards = {}, activity = [], loaded = false, readOnly = false;
+let me = "";
+let view = ls.get("ivay.view") || "board";
+let ownerFilter = ls.get("ivay.filter") || "all";
+let showLater = ls.get("ivay.later") === "1";
+let openId = null;
+
+/* ---------- dates ---------- */
+const pad = n => String(n).padStart(2,"0");
+const iso = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const parse = s => { const [y,m,d] = s.split("-").map(Number); return new Date(y,m-1,d); };
+const dayN = s => Math.round((parse(s) - START)/86400000) + 1;
+const todayISO = () => iso(new Date());
+const TODAY = () => dayN(todayISO());
+const dayDate = n => { const d = new Date(START); d.setDate(d.getDate()+n-1); return d; };
+const fmtShort = d => d.toLocaleDateString("en-GB",{weekday:"short",day:"numeric"});
+function dueInfo(c){
+  if (!c.due) return {txt:"after launch", cls:""};
+  if (c.status === "done") return {txt:"done", cls:"t-ok"};
+  const diff = dayN(c.due) - TODAY();
+  if (diff < 0) return {txt:`${-diff}d late`, cls:"t-bad"};
+  if (diff === 0) return {txt:"due today", cls:"t-warn"};
+  if (diff === 1) return {txt:"due tomorrow", cls:"t-acc"};
+  return {txt:"due " + fmtShort(parse(c.due)), cls:""};
+}
+
+/* ---------- derived state ---------- */
+const list = () => Object.values(cards);
+const isBlocked = c => c.status !== "done" && (c.deps||[]).some(d => cards[d] && cards[d].status !== "done");
+const waitingOn = c => (c.deps||[]).filter(d => cards[d] && cards[d].status !== "done");
+const isLate = c => c.status !== "done" && c.due && dayN(c.due) < TODAY();
+const unlocks = id => list().filter(c => (c.deps||[]).includes(id));
+const visible = c => (showLater || c.prio !== "later") && (ownerFilter === "all" || (ownerFilter === "none" ? !c.owner : c.owner === ownerFilter));
+function justUnblocked(c){
+  if (c.status !== "todo" || !(c.deps||[]).length || isBlocked(c)) return false;
+  const last = Math.max(...c.deps.map(d => cards[d]?.doneAt ? Date.parse(cards[d].doneAt) : 0));
+  return last && Date.now() - last < 48*3600e3;
+}
+
+/* ---------- header ---------- */
+function renderHeader(){
+  const left = LAUNCH_DAY - TODAY();
+  $("#tminus").innerHTML = left > 0 ? `T–${left}<small>${left===1?"day":"days"}</small>` : left === 0 ? `Launch<small>day</small>` : `Live<small>+${-left}d</small>`;
+  $("#todayLabel").textContent = "Day " + Math.max(1,Math.min(16,TODAY())) + " of 16 · " + new Date().toLocaleDateString("en-GB",{weekday:"long",day:"numeric",month:"short"});
+  const scope = list().filter(c => c.prio === "launch");
+  const tot = scope.reduce((a,c)=>a+(SIZE_PTS[c.size]||2),0);
+  const done = scope.filter(c=>c.status==="done").reduce((a,c)=>a+(SIZE_PTS[c.size]||2),0);
+  const p = tot ? Math.round(done/tot*100) : 0;
+  $("#pct").textContent = p + "%";
+  $("#pctFill").style.width = p + "%";
+  $("#whoRow").innerHTML = me ? `<span class="pill" aria-pressed="true"><span class="dot" style="--c:${col(me)}"></span>${esc(me)}</span>` : "";
+}
+function renderWave(){
+  const cs = list().filter(c => c.prio !== "later").sort((a,b)=> (a.due||"").localeCompare(b.due||"") || (a.start||"").localeCompare(b.start||""));
+  $("#bars").innerHTML = cs.map(c => {
+    const h = {S:42,M:70,L:100}[c.size]||70;
+    const cls = [c.status, isLate(c)?"late":"", c.prio==="stretch"?"stretch":""].join(" ");
+    return `<button class="bar ${cls}" style="height:${h}%;--c:${col(c.owner)}" data-open="${c.id}" title="${esc(c.title)} · ${esc(ownerName(c.owner))} · ${dueInfo(c).txt}" aria-label="${esc(c.title)}"></button>`;
+  }).join("") || `<div class="empty-note">The waveform fills in as cards load.</div>`;
+  const t = TODAY();
+  $("#axis").innerHTML = Array.from({length:16},(_,i)=>{ const d = dayDate(i+1); return `<span class="${i+1===t?"today":""}">${i===15?"Launch":d.getDate()+(i===0?" Oct":"")}</span>`; }).join("");
+}
+
+/* ---------- focus & pulse ---------- */
+function focusItems(person){
+  const mine = list().filter(c => c.prio !== "later" && c.status !== "done" && c.owner && (!person || c.owner === person || c.owner === "Team"));
+  const t = TODAY(), out = [];
+  const push = (c, tag, cls) => { if (!out.find(o=>o.c.id===c.id)) out.push({c,tag,cls}); };
+  mine.filter(isLate).sort((a,b)=>a.due.localeCompare(b.due)).forEach(c=>push(c,"overdue","t-bad"));
+  mine.filter(c=>c.due && dayN(c.due)===t).forEach(c=>push(c,"due today","t-warn"));
+  mine.filter(c=>c.status==="doing"||c.status==="review").forEach(c=>push(c,c.status==="review"?"in review":"in progress","t-acc"));
+  mine.filter(justUnblocked).forEach(c=>push(c,"unblocked","t-ok"));
+  mine.filter(c=>c.status==="todo" && !isBlocked(c) && c.start && dayN(c.start)<=t).sort((a,b)=>pri(a)-pri(b)||a.due.localeCompare(b.due)).forEach(c=>push(c,"ready","t-ok"));
+  // unclaimed cards worth picking up, highest priority first
+  list().filter(c=>!c.owner && c.prio!=="later" && c.status==="todo" && !isBlocked(c) && (!person || (FIT[person]||[]).includes(c.area)))
+    .sort((a,b)=>pri(a)-pri(b)||(a.due||"9").localeCompare(b.due||"9"))
+    .forEach(c=>push(c, c.priority==="blocker"?"claim · blocker":"claim · "+(c.priority||"high"), c.priority==="blocker"?"t-bad":"t-acc"));
+  return out;
+}
+function renderFocus(){
+  $("#focusTitle").textContent = me ? `${me}, your next moves` : "Today on the board";
+  if (!loaded){ return; }
+  if (!list().length){ $("#focus").innerHTML = `<div class="empty-note">No cards yet. Use Add card to put the first task on the board.</div>`; $("#nudges").innerHTML=""; return; }
+  const items = focusItems(me).slice(0, me ? 5 : 6);
+  $("#focus").innerHTML = items.length ? items.map(({c,tag,cls}) => `
+    <button class="fitem" data-open="${c.id}">
+      <span class="ftag ${cls}">${tag}</span>
+      <span style="min-width:0"><b style="font-weight:600">${esc(c.title)}</b><br><span class="empty-note">${esc(AREAS[c.area]||c.area)} · ${esc(c.group)}${me&&c.owner?"":" · "+esc(ownerName(c.owner))} · ${dueInfo(c).txt}</span></span>
+      <span class="av" style="--c:${col(c.owner)}">${esc(ini(c.owner))}</span>
+    </button>`).join("")
+    : `<div class="empty-note">${me ? "Nothing due or ready for you right now. Check what you can unblock for a teammate below." : "Nothing due or overdue right now."}</div>`;
+  // team nudges
+  const t = TODAY(), n = [];
+  PEOPLE.forEach(p => {
+    const late = list().filter(c=>c.owner===p && isLate(c)).length;
+    const today = list().filter(c=>c.owner===p && c.status!=="done" && c.due && dayN(c.due)===t).length;
+    if (late) n.push(`<span class="nudge"><span class="dot" style="--c:${col(p)};display:inline-block"></span> ${p}: <b style="color:var(--bad)">${late} overdue</b></span>`);
+    if (today) n.push(`<span class="nudge"><span class="dot" style="--c:${col(p)};display:inline-block"></span> ${p}: ${today} due today</span>`);
+  });
+  const ub = list().filter(c=>!c.owner && c.priority==="blocker" && c.status!=="done" && !isBlocked(c));
+  if (ub.length) n.push(`<button class="nudge" data-open="${ub.sort((a,b)=>(a.due||"").localeCompare(b.due||""))[0].id}"><b style="color:var(--bad)">${ub.length} unclaimed blocker${ub.length>1?"s":""}</b> ready to take</button>`);
+  // biggest blocker: undone card that blocks the most others
+  const blockers = list().filter(c=>c.status!=="done").map(c=>({c,n:unlocks(c.id).filter(u=>u.status!=="done").length})).sort((a,b)=>b.n-a.n);
+  if (blockers[0] && blockers[0].n >= 3) n.push(`<button class="nudge" data-open="${blockers[0].c.id}">Biggest blocker: <b>${esc(blockers[0].c.title)}</b> holds up ${blockers[0].n} cards</button>`);
+  $("#nudges").innerHTML = n.join("");
+}
+function renderPulse(){
+  $("#pulse").innerHTML = PEOPLE.map(p => {
+    const cs = list().filter(c=>c.owner===p && c.prio!=="later");
+    const tot = cs.length || 1;
+    const done = cs.filter(c=>c.status==="done").length;
+    const act = cs.filter(c=>c.status==="doing"||c.status==="review").length;
+    const late = cs.filter(isLate).length;
+    const w = n => (n/tot*100).toFixed(1)+"%";
+    return `<div class="prow">
+      <span class="name"><span class="dot" style="--c:${col(p)}"></span>${p}</span>
+      <span class="stack" title="${done} done, ${act} active, ${late} overdue of ${cs.length}"><span style="width:${w(done)};background:var(--ok)"></span><span style="width:${w(act)};background:var(--accent)"></span><span style="width:${w(late)};background:var(--bad)"></span></span>
+      <span class="pstat mono">${done}/${cs.length} · ${act} active${act>WIP?" ⚑":""}</span>
+    </div>`;
+  }).join("") + (()=>{ const u = list().filter(c=>!c.owner && c.prio!=="later" && c.status!=="done"); const b = u.filter(c=>c.priority==="blocker").length;
+    return `<div class="prow"><span class="name"><span class="dot"></span>Unclaimed</span><span class="pstat" style="grid-column:2/-1">${u.length} cards waiting for an owner${b?`, <b style="color:var(--bad)">${b} blockers</b>`:""}</span></div>`; })() + `<div class="empty-note">Keep at most ${WIP} cards in progress each. Finishing beats starting, and it unblocks teammates sooner.</div>`;
+}
+
+/* ---------- filters / views ---------- */
+function renderFilters(){
+  $("#filters").innerHTML = ["all","none",...OWNERS].map(o => `<button class="pill" data-filter="${o}" aria-pressed="${ownerFilter===o}">${o!=="all"&&o!=="none"?`<span class="dot" style="--c:${col(o)}"></span>`:""}${o==="all"?"Everyone":o==="none"?"Unclaimed":o}</button>`).join("");
+  $("#showLater").checked = showLater;
+  document.querySelectorAll(".tab").forEach(b => b.setAttribute("aria-selected", b.dataset.view===view));
+}
+function cardHTML(c){
+  const di = dueInfo(c), blocked = isBlocked(c), w = waitingOn(c);
+  return `<div class="card ${blocked?"blocked":""} ${c.status==="done"?"done":""}" draggable="${!readOnly}" tabindex="0" data-id="${c.id}" data-open="${c.id}" style="--c:${col(c.owner)}">
+    <span class="owner-edge"></span>
+    <div class="cmeta"><span class="cgroup">${esc(AREAS[c.area]||c.area)} · ${esc(c.group)}</span><span class="size" title="Effort">${esc(c.size||"")}</span></div>
+    <div class="ctitle">${esc(c.title)}</div>
+    <div class="cfoot">
+      <span class="ftag ${PRI_LABEL[c.priority||"high"][1]}">${PRI_LABEL[c.priority||"high"][0]}</span>
+      ${c.owner ? `<span class="av" style="--c:${col(c.owner)}" title="${esc(c.owner)}">${esc(ini(c.owner))}</span>` : `<span class="chip">unclaimed</span>`}
+      ${blocked ? `<span class="chip" title="Waiting on: ${esc(w.map(d=>cards[d]?.title).join(", "))}">waiting on ${w.length}</span>` : ""}
+      ${justUnblocked(c) ? `<span class="ftag t-ok">unblocked</span>` : ""}
+      ${c.prio==="stretch" ? `<span class="chip">stretch</span>` : ""}
+      <span class="ftag ${di.cls}" style="margin-left:auto">${di.txt}</span>
+      ${(c.kudos||[]).length ? `<span class="chip">👏 ${c.kudos.length}</span>` : ""}
+    </div>
+  </div>`;
+}
+let waitOpen = ls.get("ivay.wait") === "1";
+function todoHTML(items){
+  const ready = items.filter(c=>!isBlocked(c)), wait = items.filter(isBlocked);
+  return ready.map(cardHTML).join("") + (wait.length ? `<details class="waiting" ${waitOpen?"open":""}><summary>Waiting on other cards <span class="mono">${wait.length}</span></summary><div class="wait-list">${wait.map(cardHTML).join("")}</div></details>` : "");
+}
+document.addEventListener("toggle", e => { if (e.target.matches?.("details.waiting")) { waitOpen = e.target.open; ls.set("ivay.wait", waitOpen?"1":"0"); } }, true);
+function sortTodo(a,b){
+  const s = c => (c.prio==="later"?8:0) + (isBlocked(c)?4:0);
+  return s(a)-s(b) || pri(a)-pri(b) || (isLate(b)-isLate(a)) || (a.due||"9").localeCompare(b.due||"9") || (a.start||"").localeCompare(b.start||"");
+}
+function renderBoard(){
+  const cs = list().filter(visible);
+  const v = $("#view");
+  v.innerHTML = `<div class="board">${COLS.map(([k,label]) => {
+    let items = cs.filter(c=>c.status===k);
+    items.sort(k==="todo"?sortTodo:(a,b)=>pri(a)-pri(b)||(a.due||"9").localeCompare(b.due||"9"));
+    if (k==="done") items.sort((a,b)=>(b.doneAt||"").localeCompare(a.doneAt||""));
+    return `<section class="col" data-col="${k}"><div class="col-head"><h3>${label}</h3><span class="mono">${items.length}</span></div>
+      ${k==="todo" ? todoHTML(items) : items.map(cardHTML).join("")}${items.length ? "" : `<div class="col-empty">${k==="todo"?(loaded?"Nothing left to pick here.":"Cards load from the shared board…"):k==="done"?"Finished cards land here. Drag one in or open a card and mark it done.":"Drag a card here."}</div>`}</section>`;
+  }).join("")}</div>`;
+}
+function renderTimeline(){
+  const t = TODAY();
+  const hd = Array.from({length:16},(_,i)=>{const d=dayDate(i+1); const wk=[0,6].includes(d.getDay()); return `<div class="hd ${i+1===t?"today":""} ${wk?"wk":""}">${i===15?"LAUNCH":d.toLocaleDateString("en-GB",{weekday:"narrow"})+" "+d.getDate()}</div>`}).join("");
+  let rows = "";
+  ["",...OWNERS].filter(o=>ownerFilter==="all"||ownerFilter===o||(ownerFilter==="none"&&!o)).forEach(o => {
+    const cs = list().filter(c=>(c.owner||"")===o && c.start && c.due).sort((a,b)=>a.start.localeCompare(b.start)||a.due.localeCompare(b.due));
+    if (!cs.length) return;
+    rows += `<div class="lane"><span class="dot" style="--c:${col(o)}"></span>${ownerName(o)} <span class="empty-note" style="font-family:var(--f-body);font-weight:400">${o?ROLE[o]:"Pick one up from the board"}</span></div>`;
+    cs.forEach(c => {
+      const s = Math.max(1,dayN(c.start)), e = Math.min(16,dayN(c.due));
+      const cls = [c.status, isLate(c)?"late":"", c.prio==="stretch"?"stretch":""].join(" ");
+      rows += `<div class="lab" title="${esc(c.title)}">${esc(c.title)}</div><button class="seg ${cls}" style="grid-column:${s+1}/${e+2};--c:${col(c.owner)}" data-open="${c.id}" title="${esc(c.title)} · ${dueInfo(c).txt}" aria-label="${esc(c.title)}"></button><div style="grid-column:${e+2}/-1"></div>`;
+    });
+  });
+  $("#view").innerHTML = `<div class="tl-scroll"><div class="tl"><div class="hd" style="text-align:left;padding-left:12px">Card</div>${hd}${rows || `<div class="lane" style="color:var(--muted)">No scheduled cards yet.</div>`}</div></div>`;
+}
+function renderActivity(){
+  $("#view").innerHTML = `<div class="feed">${activity.length ? activity.map(a => `
+    <div class="ev"><span class="av" style="--c:${col(a.who||"Team")}">${esc((a.who||"?")[0])}</span><span>${esc(a.text)}</span><time>${new Date(a.ts).toLocaleString("en-GB",{weekday:"short",hour:"2-digit",minute:"2-digit"})}</time></div>`).join("")
+    : `<div class="ev"><span></span><span class="empty-note">Moves, finishes and kudos show up here as the team works.</span><span></span></div>`}</div>`;
+}
+function render(){
+  renderHeader(); renderWave(); renderFocus(); renderPulse(); renderFilters();
+  ({board:renderBoard,timeline:renderTimeline,activity:renderActivity}[view]||renderBoard)();
+  if (openId) renderDrawer(openId);
+}
+
+/* ---------- writes ---------- */
+function toast(msg, ms=3800){ const t=$("#toast"); t.textContent=msg; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(()=>t.hidden=true, ms); }
+function writeFail(e){
+  if (e && e.status === 401){ showLogin(); toast("Your session ended. Sign in again."); }
+  else toast((e && e.message) || "That change wasn't saved. Check your connection and try again.");
+  render();
+}
+async function api(method, url, body){
+  const r = await fetch(url, {method, headers:{"Content-Type":"application/json"}, credentials:"same-origin", body: body ? JSON.stringify(body) : undefined});
+  const j = await r.json().catch(()=>({}));
+  if (!r.ok) throw {status:r.status, message:j.error};
+  return j;
+}
+function log(){ /* the server records activity */ }
+async function patch(id, data){
+  const prev = cards[id];
+  cards[id] = {...prev, ...data}; render();
+  try { await api("PATCH", "/api/cards/"+encodeURIComponent(id), data); return true; }
+  catch(e){ cards[id] = prev; writeFail(e); return false; }
+}
+const STATUS_WORD = {todo:"moved back to Ready",doing:"started",review:"sent to review",done:"finished"};
+async function setStatus(id, status){
+  const c = cards[id]; if (!c || c.status === status) return;
+  const extra = {};
+  if (status !== "todo" && !c.owner){
+    if (!me){ toast("Pick who you are at the top first, so the card can be yours."); return; }
+    extra.owner = me;
+  }
+  const actor = extra.owner || c.owner;
+  if (status === "doing" && actor !== "Team"){
+    const active = list().filter(x=>x.owner===actor && x.status==="doing").length;
+    if (active >= WIP) toast(`${actor} already has ${active} cards in progress. Finishing one first keeps the team unblocked.`, 5200);
+  }
+  if (status !== "todo" && isBlocked(c)){
+    toast(`Heads up: still waiting on ${waitingOn(c).map(d=>cards[d].title).join(", ")}.`, 5200);
+  }
+  const before = list().filter(x=>x.status==="todo" && isBlocked(x)).map(x=>x.id);
+  const ok = await patch(id, {...extra, status, doneAt: status==="done" ? new Date().toISOString() : null});
+  if (!ok) return;
+  log(`${me||"Someone"} ${extra.owner?"claimed and ":""}${STATUS_WORD[status]} “${c.title}”`);
+  if (status === "done"){
+    const freed = before.filter(x => !isBlocked(cards[x]));
+    celebrate();
+    if (freed.length){
+      toast(`Done. That unblocked ${freed.length}: ${freed.map(x=>cards[x].title+" ("+ownerName(cards[x].owner)+")").join(", ")}`, 6500);
+      log(`Unblocked: ${freed.map(x=>cards[x].title).join(", ")}`);
+    } else toast(`Done: ${c.title}. ${Math.max(0,LAUNCH_DAY-TODAY())} days to launch.`);
+  }
+}
+
+/* ---------- drawer ---------- */
+function openDrawer(id){ openId = id; $("#scrim").hidden = false; $("#drawer").hidden = false; renderDrawer(id); setTimeout(()=>$("#drawer .x")?.focus(),0); }
+function closeDrawer(){ openId = null; $("#scrim").hidden = true; $("#drawer").hidden = true; }
+function depRow(d){ const x = cards[d]; if (!x) return ""; const st = x.status==="done"?["done","t-ok"]:isLate(x)?["late","t-bad"]:x.status==="todo"?["to do",""]:[x.status==="review"?"review":"in progress","t-acc"];
+  return `<button class="dep" data-open="${d}"><span class="av" style="--c:${col(x.owner)}">${esc(ini(x.owner))}</span><span>${esc(x.title)}</span><span class="ftag st ${st[1]}">${st[0]}</span></button>`; }
+function renderDrawer(id){
+  const d = $("#drawer");
+  if (id === "__new"){ d.innerHTML = newForm(); return; }
+  const c = cards[id]; if (!c){ closeDrawer(); return; }
+  const di = dueInfo(c), u = unlocks(id);
+  const next = {todo:[["doing",c.owner?"Start":"Take it and start","main"]],doing:[["review","Send to review","main"],["done","Mark done","good"],["todo","Move back",""]],review:[["done","Mark done","good"],["doing","Back to in progress",""]],done:[["doing","Reopen",""]]}[c.status]||[];
+  const iKudo = (c.kudos||[]).includes(me);
+  d.innerHTML = `
+    <div class="dhead"><div style="display:grid;gap:6px"><span class="eyebrow">${esc(AREAS[c.area]||c.area)} · ${esc(c.group)}</span><h2>${esc(c.title)}</h2></div><button class="x" aria-label="Close">✕</button></div>
+    <div class="cfoot"><span class="ftag ${PRI_LABEL[c.priority||"high"][1]}">${PRI_LABEL[c.priority||"high"][0]} priority</span><span class="ftag ${di.cls}">${di.txt}</span>${c.owner?"":`<span class="chip">unclaimed</span>`}${c.prio==="stretch"?`<span class="chip">stretch goal</span>`:c.prio==="later"?`<span class="chip">after launch</span>`:`<span class="chip">launch scope</span>`}<span class="chip">effort ${esc(c.size)}</span>${isBlocked(c)?`<span class="chip">waiting on ${waitingOn(c).length}</span>`:""}</div>
+    ${readOnly ? `<div class="empty-note">You're viewing this board read-only.</div>` : `<div class="actions">${!c.owner&&c.status==="todo"?`<button class="act" id="claimBtn">Take it</button>`:""}${next.map(([s,l,k])=>`<button class="act ${k}" data-status="${s}">${l}</button>`).join("")}${c.owner&&c.owner===me&&c.status==="todo"?`<button class="act" id="releaseBtn">Give it back</button>`:""}</div>`}
+    ${c.status==="done" ? `<div class="kudos"><button class="act" id="kudoBtn" ${!me?"disabled title='Pick who you are at the top first'":""}>${iKudo?"Kudos sent":"Send kudos"} 👏</button><span class="empty-note">${(c.kudos||[]).length?esc(c.kudos.join(", "))+" cheered this":"Be the first to cheer this."}</span></div>`:""}
+    <div class="grid2">
+      <label class="f">Owner<select id="fOwner"><option value="" ${!c.owner?"selected":""}>Unclaimed</option>${OWNERS.map(o=>`<option ${o===c.owner?"selected":""}>${o}</option>`).join("")}</select></label>
+      <label class="f">Priority<select id="fPriority">${["blocker","high","low"].map(v=>`<option value="${v}" ${v===(c.priority||"high")?"selected":""}>${PRI_LABEL[v][0]}</option>`).join("")}</select></label>
+      <label class="f">Effort<select id="fSize">${["S","M","L"].map(s=>`<option ${s===c.size?"selected":""}>${s}</option>`).join("")}</select></label>
+      <label class="f">Start<input type="date" id="fStart" value="${c.start||""}"></label>
+      <label class="f">Due<input type="date" id="fDue" value="${c.due||""}"></label>
+    </div>
+    <label class="f">Notes<textarea id="fNote" placeholder="Decisions, links, what's left…">${esc(c.note||"")}</textarea></label>
+    <div style="display:grid;gap:6px"><span class="eyebrow">Needs first</span><div class="deps">${(c.deps||[]).map(depRow).join("") || `<span class="empty-note">Nothing. This card can start any time.</span>`}</div></div>
+    <div style="display:grid;gap:6px"><span class="eyebrow">Finishing this unblocks</span><div class="deps">${u.map(x=>depRow(x.id)).join("") || `<span class="empty-note">No other card waits on this one.</span>`}</div></div>
+    ${c.updatedBy?`<div class="empty-note">Last change by ${esc(c.updatedBy)} · ${new Date(c.updatedAt).toLocaleString("en-GB",{weekday:"short",hour:"2-digit",minute:"2-digit"})}</div>`:""}
+  `;
+  if (readOnly) d.querySelectorAll("select,input,textarea").forEach(e=>e.disabled=true);
+}
+function newForm(){
+  return `<div class="dhead"><div style="display:grid;gap:6px"><span class="eyebrow">New card</span><h2>Add a task</h2></div><button class="x" aria-label="Close">✕</button></div>
+  <form id="newCard" style="display:grid;gap:12px">
+    <label class="f">Title<input id="nTitle" required maxlength="140" placeholder="e.g. Fix voice dropout on Safari"></label>
+    <div class="grid2">
+      <label class="f">Area<select id="nArea">${Object.entries(AREAS).map(([k,v])=>`<option value="${k}">${v}</option>`).join("")}</select></label>
+      <label class="f">Owner<select id="nOwner"><option value="" selected>Unclaimed</option>${OWNERS.map(o=>`<option>${o}</option>`).join("")}</select></label>
+      <label class="f">Priority<select id="nPriority"><option value="blocker">Blocker</option><option value="high" selected>High</option><option value="low">Low</option></select></label>
+      <label class="f">Start<input type="date" id="nStart" value="${todayISO()}"></label>
+      <label class="f">Due<input type="date" id="nDue" value="${todayISO()}"></label>
+      <label class="f">Effort<select id="nSize"><option>S</option><option selected>M</option><option>L</option></select></label>
+      <label class="f">Scope<select id="nPrio"><option value="launch">Launch</option><option value="stretch">Stretch</option><option value="later">After launch</option></select></label>
+    </div>
+    <label class="f">Group<input id="nGroup" placeholder="e.g. Avatar, Q&A, Marketing"></label>
+    <div class="actions"><button class="act main" type="submit">Add to board</button></div>
+  </form>`;
+}
+
+/* ---------- confetti ---------- */
+function celebrate(){
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+  const cv = $("#confetti"), ctx = cv.getContext("2d"); cv.hidden = false;
+  cv.width = innerWidth; cv.height = innerHeight;
+  const cs = getComputedStyle(document.documentElement);
+  const pal = ["--accent","--saleeta","--zain","--musharaf","--ok"].map(v=>cs.getPropertyValue(v).trim());
+  const ps = Array.from({length:90},()=>({x:innerWidth/2,y:innerHeight*.35,vx:(Math.random()-.5)*12,vy:-Math.random()*10-4,r:Math.random()*5+3,c:pal[Math.random()*pal.length|0],a:Math.random()*6}));
+  let f = 0;
+  (function tick(){ ctx.clearRect(0,0,cv.width,cv.height);
+    ps.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.a+=.2;ctx.fillStyle=p.c;ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.a);ctx.fillRect(-p.r,-p.r/2,p.r*2,p.r);ctx.restore();});
+    if (++f < 90) requestAnimationFrame(tick); else { ctx.clearRect(0,0,cv.width,cv.height); cv.hidden = true; } })();
+}
+
+/* ---------- events ---------- */
+document.addEventListener("click", async e => {
+  const t = e.target.closest("[data-me],[data-filter],[data-view],[data-open],[data-status],.x,#addBtn,#kudoBtn,#claimBtn,#releaseBtn,#scrim");
+  if (!t) return;
+  if (t.matches("[data-me]")){ me = t.dataset.me; ls.set("ivay.me", me); if (me && ownerFilter==="all") {} render(); return; }
+  if (t.matches("[data-filter]")){ ownerFilter = t.dataset.filter; ls.set("ivay.filter", ownerFilter); render(); return; }
+  if (t.matches("[data-view]")){ view = t.dataset.view; ls.set("ivay.view", view); render(); return; }
+  if (t.matches("[data-status]")){ await setStatus(openId, t.dataset.status); return; }
+  if (t.matches(".x") || t.id === "scrim"){ closeDrawer(); return; }
+  if (t.id === "addBtn"){ if (readOnly) { toast("You're viewing this board read-only."); return; } openDrawer("__new"); return; }
+  if (t.id === "claimBtn" || t.id === "releaseBtn"){ const c = cards[openId]; if (!c) return;
+    if (t.id === "claimBtn" && !me){ toast("Pick who you are at the top first."); return; }
+    const v = t.id === "claimBtn" ? me : "";
+    if (await patch(openId,{owner:v})) { log(v ? `${me} took “${c.title}”` : `${me} gave back “${c.title}”`); toast(v ? "It's yours. Start it when you're ready." : "Card is unclaimed again."); } return; }
+  if (t.id === "kudoBtn"){ const c = cards[openId]; if (!me || !c) return; const k = new Set(c.kudos||[]); if (k.has(me)) return; k.add(me);
+    if (await patch(openId,{kudos:[...k]})) { log(`${me} sent kudos to ${ownerName(c.owner)} for “${c.title}”`); toast(`Kudos sent to ${ownerName(c.owner)}.`); } return; }
+  if (t.matches("[data-open]")){ openDrawer(t.dataset.open); return; }
+});
+document.addEventListener("keydown", e => {
+  if (e.key === "Escape" && openId) closeDrawer();
+  if (e.key === "Enter" && e.target.matches(".card")) openDrawer(e.target.dataset.id);
+});
+$("#showLater").addEventListener("change", e => { showLater = e.target.checked; ls.set("ivay.later", showLater?"1":"0"); render(); });
+document.addEventListener("change", e => {
+  if (!openId || openId === "__new") return;
+  const map = {fOwner:"owner",fPriority:"priority",fSize:"size",fStart:"start",fDue:"due",fNote:"note"};
+  const k = map[e.target.id]; if (!k) return;
+  const v = e.target.value; if ((cards[openId]||{})[k] === v) return;
+  patch(openId, {[k]: v}).then(ok => { if (ok && k==="owner") log(v ? `${me||"Someone"} gave “${cards[openId].title}” to ${v}` : `${me||"Someone"} put “${cards[openId].title}” back as unclaimed`); });
+});
+document.addEventListener("submit", async e => {
+  if (e.target.id !== "newCard") return;
+  e.preventDefault();
+  const title = $("#nTitle").value.trim(); if (!title) return;
+  const data = {title, area:$("#nArea").value, owner:$("#nOwner").value, start:$("#nStart").value||null, due:$("#nDue").value||null, size:$("#nSize").value, priority:$("#nPriority").value, prio:$("#nPrio").value, group:$("#nGroup").value.trim()||AREAS[$("#nArea").value], deps:[], status:"todo", kudos:[], note:"", doneAt:null, updatedAt:new Date().toISOString(), updatedBy:me||"Someone"};
+  try { const r = await api("POST", "/api/cards", data); cards[r.card.id] = r.card; toast("Card added."); openDrawer(r.card.id); }
+  catch(err){ writeFail(err); }
+});
+// drag and drop
+let dragId = null;
+document.addEventListener("dragstart", e => { const c = e.target.closest?.(".card"); if (!c || readOnly) return; dragId = c.dataset.id; c.classList.add("dragging"); e.dataTransfer.effectAllowed = "move"; try{e.dataTransfer.setData("text/plain", dragId);}catch(_){} });
+document.addEventListener("dragend", e => { e.target.closest?.(".card")?.classList.remove("dragging"); document.querySelectorAll(".col.drop").forEach(x=>x.classList.remove("drop")); });
+document.addEventListener("dragover", e => { const col = e.target.closest?.(".col"); if (!col || !dragId) return; e.preventDefault(); document.querySelectorAll(".col.drop").forEach(x=>x!==col&&x.classList.remove("drop")); col.classList.add("drop"); });
+document.addEventListener("drop", e => { const col = e.target.closest?.(".col"); if (!col || !dragId) return; e.preventDefault(); col.classList.remove("drop"); const id = dragId; dragId = null; setStatus(id, col.dataset.col); });
+
+/* ---------- boot ---------- */
+render();
+setInterval(()=>{ if (loaded) { renderHeader(); renderFocus(); } }, 60000);
+function showLogin(){ $("#login").hidden = false; setTimeout(()=>$("#lPass").focus(),0); }
+let es = null;
+function connect(){
+  if (es) es.close();
+  es = new EventSource("/api/events");
+  es.onmessage = ev => {
+    const st = JSON.parse(ev.data);
+    const next = {}; Object.entries(st.cards).forEach(([id,c]) => next[id] = {...c, id});
+    cards = next; activity = st.activity || []; loaded = true; $("#banner").hidden = true; render();
+  };
+  es.onerror = () => { if (es.readyState === 2) { const b=$("#banner"); b.hidden=false; b.textContent="Lost connection to the board. Reload the page to reconnect."; } };
+}
+async function start(){
+  try { const r = await api("GET","/api/me"); me = r.name; $("#login").hidden = true; render(); connect(); }
+  catch(e){ showLogin(); }
+}
+$("#loginForm").addEventListener("submit", async e => {
+  e.preventDefault(); e.stopPropagation(); $("#lErr").textContent = "";
+  try { const r = await api("POST","/api/login",{name:$("#lName").value, passcode:$("#lPass").value}); me = r.name; $("#lPass").value = ""; $("#login").hidden = true; render(); connect(); }
+  catch(err){ $("#lErr").textContent = err.message || "Couldn't sign in. Try again."; }
+});
+$("#logoutBtn").addEventListener("click", async () => { try { await api("POST","/api/logout"); } catch(_){} if (es) es.close(); me = ""; cards = {}; loaded = false; render(); showLogin(); });
+start();
+})();
+</script>
+
+</body>
+</html>
